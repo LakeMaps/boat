@@ -1,0 +1,9 @@
+include "core"
+include "cli"
+
+rootProject.name = "boat"
+rootProject.buildFileName = "build.gradle.kts"
+rootProject.children.each {
+    it.projectDir = new File("projects/${it.name}")
+    it.buildFileName = "build.gradle.kts"
+}
