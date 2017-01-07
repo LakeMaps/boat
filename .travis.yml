@@ -1,0 +1,24 @@
+sudo: false
+language: java
+
+env:
+    global:
+        - GRADLE_VERSION='3.4-20161216120313+0000'
+        - GRADLE_DISTRIBUTION_URL="https://repo.gradle.org/gradle/dist-snapshots/gradle-script-kotlin-$GRADLE_VERSION-bin.zip"
+        - TERM=dumb
+matrix:
+    include:
+        - jdk: oraclejdk8
+          os: linux
+        - jdk: oraclejdk7
+          os: linux
+before_install:
+    - (cd "$HOME" && curl -sSLO "$GRADLE_DISTRIBUTION_URL")
+    - (cd "$HOME" && unzip -q $(basename "$GRADLE_DISTRIBUTION_URL"))
+    - export PATH="$HOME/gradle-$GRADLE_VERSION/bin:$PATH"
+    - gradle --version
+script:
+    - gradle build
+
+notifications:
+    email: false
