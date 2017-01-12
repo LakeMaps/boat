@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+set -e
+set -u
+set -o pipefail
+
+(
+       cd "${HOME}" \
+    && curl -sSLO "${GRADLE_DISTRIBUTION_URL}" \
+    && unzip -q $(basename "${GRADLE_DISTRIBUTION_URL}") \
+    && mv "gradle-${GRADLE_VERSION}" "gradle"
+)
