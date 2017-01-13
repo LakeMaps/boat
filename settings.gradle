@@ -1,5 +1,6 @@
 include "core"
 include "cli"
+include "microcontrollers"
 
 rootProject.name = "boat"
 rootProject.buildFileName = "build.gradle.kts"
