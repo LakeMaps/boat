@@ -13,9 +13,14 @@ matrix:
         - jdk: oraclejdk7
           os: linux
 before_install:
-    - (cd "$HOME" && curl -sSLO "$GRADLE_DISTRIBUTION_URL")
-    - (cd "$HOME" && unzip -q $(basename "$GRADLE_DISTRIBUTION_URL"))
-    - export PATH="$HOME/gradle-$GRADLE_VERSION/bin:$PATH"
+    - (
+           cd "${HOME}"
+        && curl -sSLO "${GRADLE_DISTRIBUTION_URL}"
+        && unzip -q $(basename "${GRADLE_DISTRIBUTION_URL}")
+        && mv "gradle-${GRADLE_VERSION}" "gradle"
+      )
+    - export PATH="${HOME}/gradle/bin:${PATH}"
+    - hash -r
     - gradle --version
 script:
     - gradle build
