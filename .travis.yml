@@ -13,12 +13,10 @@ matrix:
         - jdk: oraclejdk7
           os: linux
 before_install:
-    - (cd "$HOME" && curl -sSLO "$GRADLE_DISTRIBUTION_URL")
-    - (cd "$HOME" && unzip -q $(basename "$GRADLE_DISTRIBUTION_URL"))
-    - export PATH="$HOME/gradle-$GRADLE_VERSION/bin:$PATH"
-    - gradle --version
+    - .ci/travis/install
+    - export PATH="${HOME}/gradle/bin:${PATH}"
 script:
-    - gradle build
+    - .ci/travis/compile
 
 notifications:
     email: false
