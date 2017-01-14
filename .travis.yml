@@ -10,8 +10,6 @@ matrix:
     include:
         - jdk: oraclejdk8
           os: linux
-        - jdk: oraclejdk7
-          os: linux
 before_install:
     - (
            cd "${HOME}"
