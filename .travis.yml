@@ -11,3 +11,6 @@ env:
 script:
     - mkdir -p "build/${PROTOC_OUT}"
     - protoc "--${PROTOC_OUT}_out=build/${PROTOC_OUT}" src/*.proto
+
+notifications:
+    email: false
