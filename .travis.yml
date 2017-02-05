@@ -20,6 +20,8 @@ before_install:
     - export PATH="${HOME}/gradle/bin:${PATH}"
     - hash -r
     - gradle --version
+install:
+    - gradle resolveAllDependencies
 script:
     - gradle build
 
