@@ -4,6 +4,12 @@ allprojects {
     }
 }
 
+allprojects {
+    task("resolveAllDependencies", {
+        doLast { configurations.all { it.resolve() } }
+    })
+}
+
 plugins {
     base
 }
