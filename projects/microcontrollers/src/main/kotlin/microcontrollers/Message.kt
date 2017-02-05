@@ -10,6 +10,10 @@ class Message(val command: Byte, val payload: ByteArray) {
         body + crc16(body)
     }
 
+    val checksum: ByteArray by lazy {
+        bytes.sliceArray((bytes.lastIndex - 1)..bytes.lastIndex)
+    }
+
     private fun crc16(bytes: ByteArray): ByteArray {
         var result: Int = 0
         for (b in bytes.map(Byte::toInt)) {
