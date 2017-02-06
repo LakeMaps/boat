@@ -1,6 +1,7 @@
 package microcontrollers
 
 import java.nio.ByteBuffer
+import java.util.Arrays
 import java.util.concurrent.locks.Lock
 
 internal interface Microcontroller {
@@ -28,13 +29,17 @@ internal interface Microcontroller {
                 is MessageState.Payload -> state.next(recv, { b -> buffer.put(b) })
                 is MessageState.Checksum -> {
                     val bytes = buffer.array().sliceArray(0 until buffer.position())
+                    val message = Message(bytes[1], bytes.sliceArray(2..bytes.lastIndex))
+                    val nextTwoBytes = byteArrayOf(recv(), recv())
 
-                    recv()
-                    recv()
-                    // We might want to validate this checksum at some point?
                     buffer.clear()
 
-                    return Message(bytes[1], bytes.sliceArray(2..bytes.lastIndex))
+                    if (Arrays.equals(nextTwoBytes, message.checksum)) {
+                        return message
+                    }
+
+                    // Message is corrupt
+                    MessageState.Started()
                 }
             }
         }

@@ -14,4 +14,12 @@ class MessageTest {
 
         CollectionAssertionSession(message.bytes.asIterable()).shouldBe(expected.asIterable())
     }
+
+    @Test
+    fun messageChecksumBytesAreCorrect() {
+        val message = Message(0x10, byteArrayOf(0x00))
+        val expected = byteArrayOf(0x79, 0x2E)
+
+        CollectionAssertionSession(message.checksum.asIterable()).shouldBe(expected.asIterable())
+    }
 }
