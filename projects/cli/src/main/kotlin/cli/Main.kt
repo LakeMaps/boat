@@ -21,7 +21,7 @@ import rx.Observable
 import rx.broadcast.InMemoryBroadcast
 import rx.schedulers.Schedulers
 
-private fun serialPort(name: String, baudRate: Int = 11500): Triple<SerialPort, () -> Byte, (ByteArray) -> Unit> {
+private fun serialPort(name: String, baudRate: Int = 115200): Triple<SerialPort, () -> Byte, (ByteArray) -> Unit> {
     val serialPort = SerialPort.getCommPort(name)
     serialPort.baudRate = baudRate
     serialPort.openPort()
