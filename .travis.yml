@@ -4,7 +4,7 @@ language: java
 
 env:
     global:
-        - GRADLE_VERSION='3.4-20161216120313+0000'
+        - GRADLE_VERSION='3.4-20170117200919+0000'
         - GRADLE_DISTRIBUTION_URL="https://repo.gradle.org/gradle/dist-snapshots/gradle-script-kotlin-$GRADLE_VERSION-bin.zip"
         - TERM=dumb
 jdk:
