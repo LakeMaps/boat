@@ -1,5 +1,6 @@
 include "core"
 include "cli"
+include "gps"
 include "microcontrollers"
 
 rootProject.name = "boat"
