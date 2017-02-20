@@ -4,12 +4,12 @@ import java.time.OffsetTime
 
 data class GpsFix(
     val time: OffsetTime,
-    val position: GpsPosition,
+    val position: GpsPosition?,
     val positionFixIndicator: Char,
     val satellitesUsed: Int,
-    val dilutionOfPrecision: GpsDilutionOfPrecision,
-    val altitude: Double,
-    val geoidalSeparation: Double
+    val dilutionOfPrecision: GpsDilutionOfPrecision?,
+    val altitude: Double?,
+    val geoidalSeparation: Double?
 ) {
     companion object {
         const val FIX_NOT_AVAILABLE = '0'

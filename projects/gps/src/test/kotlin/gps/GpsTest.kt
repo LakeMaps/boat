@@ -93,4 +93,14 @@ class GpsTest {
 
         Assert.assertEquals(expected, gsa)
     }
+
+    @Test
+    fun testEmptyGgaSentence() {
+        val expected = GpsFix(OffsetTime.of(6, 49, 51, 0, ZoneOffset.UTC), null, '0', 1, null, null, null)
+
+        val gps = Gps({ '?' }, { })
+        val gsa = gps.gga(Sentence("GP", "GGA", arrayOf("064951.000", "", "", "", "", "0", "01", "", "", "", "", "", "", "")))
+
+        Assert.assertEquals(expected, gsa)
+    }
 }

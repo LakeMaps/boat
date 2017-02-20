@@ -26,9 +26,11 @@ class Gps(recv: () -> Char, private val callback: (Any) -> Unit) {
 
     internal fun gga(sentence: Sentence): GpsFix {
         val time = OffsetTime.of(sentence.time(0), ZoneOffset.UTC)
-        val position = GpsPosition(latitude = sentence.double(1), longitude = sentence.double(3))
-        val dOP = GpsDilutionOfPrecision(horizontal = sentence.double(7))
-        return GpsFix(time, position, sentence.char(5), sentence.int(6), dOP, sentence.double(8), sentence.double(10))
+        val lat = sentence.doubleOrNull(1)
+        val position = lat?.let { GpsPosition(latitude = it, longitude = sentence.double(3)) }
+        val dOP = sentence.doubleOrNull(7)?.let { GpsDilutionOfPrecision(horizontal = it) }
+        val altitude = sentence.doubleOrNull(8)
+        return GpsFix(time, position, sentence.char(5), sentence.int(6), dOP, altitude, sentence.doubleOrNull(10))
     }
 
     internal fun gsa(sentence: Sentence): GpsActiveSatellites {
@@ -85,6 +87,10 @@ class Gps(recv: () -> Char, private val callback: (Any) -> Unit) {
 
     private fun Sentence.int(index: Int): Int {
         return String(this.fields[index]).toInt(radix = 10)
+    }
+
+    private fun Sentence.doubleOrNull(index: Int): Double? {
+        return this.fields.getOrNull(index)?.let { String(it).toDoubleOrNull() }
     }
 
     private fun Sentence.double(index: Int): Double {
