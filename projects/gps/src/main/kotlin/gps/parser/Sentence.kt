@@ -17,6 +17,8 @@ import java.util.Locale
 class Sentence(val talker: CharArray, val type: CharArray, val fields: Array<CharArray>) {
     companion object {
         const val MESSAGE_START = 0x24.toChar()
+        const val MESSAGE_END1 = 0x0D.toChar()
+        const val MESSAGE_END2 = 0x0A.toChar()
         const val FIELD_DELIMITER = 0x2C.toChar()
         const val CHECKSUM_DELIMITER = 0x2A.toChar()
     }

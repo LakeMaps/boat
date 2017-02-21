@@ -46,3 +46,40 @@ class SentenceParserTest(private val message: String) {
         Assert.assertEquals(sentence.toString(), message)
     }
 }
+
+@RunWith(Parameterized::class)
+class SentenceParserEdgeCasesTest(msg: String, private val expected: String, private val message: String) {
+    companion object {
+        @JvmStatic
+        @Parameterized.Parameters(name = "{0}")
+        fun data() : Collection<Array<String>> {
+            return listOf(
+                // A few edge cases
+                arrayOf(
+                    "Sentence ending with 0x0D0A",
+                    "\$GPVTG,165.48,T,,M,0.03,N,0.06,K,A*36",
+                    "\$GPVTG,165.48,T,,M,0.03,N,0.06,K,A" + String(charArrayOf(0x0D.toChar(), 0x0A.toChar()))
+                ),
+                arrayOf(
+                    "Sentence ending with 0x0D",
+                    "\$GPVTG,165.48,T,,M,0.03,N,0.06,K,A*36",
+                    "\$GPVTG,165.48,T,,M,0.03,N,0.06,K,A" + String(charArrayOf(0x0D.toChar()))
+                ),
+                arrayOf(
+                    "Sentence ending with 0x0A",
+                    "\$GPVTG,165.48,T,,M,0.03,N,0.06,K,A*36",
+                    "\$GPVTG,165.48,T,,M,0.03,N,0.06,K,A" + String(charArrayOf(0x0A.toChar()))
+                )
+            )
+        }
+    }
+
+    @Test()
+    fun parseMessage() {
+        val chars = message.toCharArray()
+        var count = 0
+        val parser = SentenceParser({ chars[count++] })
+        val sentence = parser.nextMessage()
+        Assert.assertEquals(expected, sentence.toString())
+    }
+}

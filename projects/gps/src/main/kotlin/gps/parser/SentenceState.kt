@@ -56,6 +56,10 @@ internal sealed class SentenceState {
                     fields.add(field.toCharArray())
                     return SentenceState.Checksum(talker, type, fields.toTypedArray())
                 }
+                if (char == Sentence.MESSAGE_END1 || char == Sentence.MESSAGE_END2) {
+                    fields.add(field.toCharArray())
+                    return SentenceState.Complete(talker, type, fields.toTypedArray())
+                }
                 // We've seen 7 chars from previous states
                 if ((count + 7) > MAXIMUM_SENTENCE_LENGTH) {
                     return SentenceState.Prefix()
