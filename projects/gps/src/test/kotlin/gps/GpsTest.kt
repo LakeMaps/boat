@@ -103,4 +103,48 @@ class GpsTest {
 
         Assert.assertEquals(expected, gsa)
     }
+
+    @Test
+    fun testRmcSentenceWithoutLock() {
+        val time = OffsetDateTime.of(2006, 4, 26, 6, 49, 51, 0, ZoneOffset.UTC)
+        val expectedGpsNavInfo = GpsNavInfo(time, false, null, null, null, 'N')
+
+        val gps = Gps({ '?' }, { })
+        val rmc = gps.rmc(Sentence("GP", "RMC", arrayOf("064951.000", "V", "", "", "", "", "", "", "260406", "", "", "N")))
+
+        Assert.assertEquals(expectedGpsNavInfo, rmc)
+        Assert.assertFalse("Status should NOT be 'Valid'", rmc.valid)
+    }
+
+    @Test
+    fun testGsvSentenceWithoutLock() {
+        val expectedGsv = GpsSatellitesInView(1, 1, 0, null)
+
+        val gps = Gps({ '?' }, { })
+        val gsv = gps.gsv(Sentence("GP", "GSV", arrayOf("1", "1", "00")))
+
+        Assert.assertEquals(expectedGsv, gsv)
+    }
+
+    @Test
+    fun testGsaSentenceWithoutLock() {
+        val expectedGsa = GpsActiveSatellites('A', '1', GpsChannelArray(intArrayOf()), GpsDilutionOfPrecision())
+
+        val gps = Gps({ '?' }, { })
+        val gsa = gps.gsa(Sentence("GP", "GSA", arrayOf("A", "1", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "")))
+
+        Assert.assertEquals(expectedGsa, gsa)
+        Assert.assertTrue("Mode 1 should be 'Automatic'", gsa.mode1 == GpsActiveSatellites.AUTOMATIC_MODE)
+        Assert.assertTrue("Mode 2 should be N/A", gsa.mode2 == GpsActiveSatellites.FIX_NOT_AVAILABLE)
+    }
+
+    @Test
+    fun testGgaSentenceWithoutLock() {
+        val expected = GpsFix(OffsetTime.of(6, 49, 51, 0, ZoneOffset.UTC), null, '0', 0, null, null, 0.0)
+
+        val gps = Gps({ '?' }, { })
+        val gsa = gps.gga(Sentence("GP", "GGA", arrayOf("064951.000", "", "", "", "", "0", "00", "", "", "M", "0.0", "M", "", "0000")))
+
+        Assert.assertEquals(expected, gsa)
+    }
 }

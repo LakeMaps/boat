@@ -3,8 +3,8 @@ package gps
 data class GpsActiveSatellites(
     val mode1: Char,
     val mode2: Char,
-    val satellitesUsed: GpsChannelArray,
-    val dilutionOfPrecision: GpsDilutionOfPrecision
+    val satellitesUsed: GpsChannelArray?,
+    val dilutionOfPrecision: GpsDilutionOfPrecision?
 ) {
     companion object {
         const val AUTOMATIC_MODE = 'A'

@@ -35,12 +35,11 @@ class Gps(recv: () -> Char, private val callback: (Any) -> Unit) {
 
     internal fun gsa(sentence: Sentence): GpsActiveSatellites {
         val channels = GpsChannelArray((2..15).mapNotNull { sentence.intOrNull(it) }.toIntArray())
-        val dilutionOfPrecision = GpsDilutionOfPrecision(sentence.double(14), sentence.double(15), sentence.double(16))
+        val dilutionOfPrecision = GpsDilutionOfPrecision(sentence.doubleOrNull(14), sentence.doubleOrNull(15), sentence.doubleOrNull(16))
         return GpsActiveSatellites(sentence.char(0), sentence.char(1), channels, dilutionOfPrecision)
     }
 
     internal fun gsv(sentence: Sentence): GpsSatellitesInView {
-        // These are all conditional for the sake of "symmetry", the first channel should always have an ID
         val channel1Id = sentence.intOrNull( 3)
         val channel1 = channel1Id?.let { GpsSatelliteMessage(it, sentence.intOrNull( 4), sentence.intOrNull( 5), sentence.int( 6)) }
 
@@ -53,7 +52,7 @@ class Gps(recv: () -> Char, private val callback: (Any) -> Unit) {
         val channel4Id = sentence.intOrNull(15)
         val channel4 = channel4Id?.let { GpsSatelliteMessage(it, sentence.intOrNull(16), sentence.intOrNull(17), sentence.int(18)) }
 
-        return GpsSatellitesInView(sentence.int(0), sentence.int(1), sentence.int(2), channel1!!, channel2, channel3, channel4)
+        return GpsSatellitesInView(sentence.int(0), sentence.int(1), sentence.int(2), channel1, channel2, channel3, channel4)
     }
 
     internal fun rmc(sentence: Sentence): GpsNavInfo {
@@ -61,8 +60,10 @@ class Gps(recv: () -> Char, private val callback: (Any) -> Unit) {
         val time = sentence.time(0)
         val datetime = OffsetDateTime.of(date, time, ZoneOffset.UTC)
         val status = sentence.char(1) == GpsNavInfo.STATUS_VALID
-        val position = GpsPosition(sentence.double(4), sentence.double(2))
-        return GpsNavInfo(datetime, status, position, sentence.double(6), sentence.double(7), sentence.char(11))
+        val latitude = sentence.doubleOrNull(4)
+        val longitude = sentence.doubleOrNull(2)
+        val position = if (latitude != null && longitude != null) GpsPosition(latitude, longitude) else null
+        return GpsNavInfo(datetime, status, position, sentence.doubleOrNull(6), sentence.doubleOrNull(7), sentence.char(11))
     }
 
     internal fun vtg(sentence: Sentence): GpsGroundVelocity {

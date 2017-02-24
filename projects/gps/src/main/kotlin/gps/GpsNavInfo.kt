@@ -5,9 +5,9 @@ import java.time.OffsetDateTime
 data class GpsNavInfo(
     val instant: OffsetDateTime,
     val valid: Boolean,
-    val position: GpsPosition,
-    val speed: Double,
-    val course: Double,
+    val position: GpsPosition?,
+    val speed: Double?,
+    val course: Double?,
     val mode: Char
 ) {
     companion object {
