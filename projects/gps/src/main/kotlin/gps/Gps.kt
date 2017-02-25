@@ -9,6 +9,22 @@ import java.time.OffsetTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
+/**
+ * A GPS device.
+ *
+ * The use of the input and output functions are controlled by [poll]ing the device. Each call
+ * to [poll] reads a number of characters from the input function and parses them into a NMEA 0183
+ * sentence, which is passed to [callback]. For example:
+ *
+ *     val serial = Serial("/dev/ttyS0")
+ *     val gps = Gps({ serial.read() }, { msg -> })
+ *     gps.poll()
+ *
+ * **Note: this implementation supports `GGA`, `GSA`, `GSV`, `RMC`, and `VTG` sentences only.**
+ *
+ * @param recv an input function returning a character from the GPS
+ * @param callback an output function accepting a GPS sentence
+ */
 class Gps(recv: () -> Char, private val callback: (Any) -> Unit) {
     private val parser = SentenceParser(recv)
 

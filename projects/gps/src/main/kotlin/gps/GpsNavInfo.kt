@@ -2,6 +2,16 @@ package gps
 
 import java.time.OffsetDateTime
 
+/**
+ * An NMEA 0183 `RMC` sentence.
+ *
+ * @property instant the timestamp for this measurement
+ * @property valid whether or not this position is valid
+ * @property position the GPS position
+ * @property speed the measured speed in knots
+ * @property course the measured heading
+ * @property mode the device mode when this velocity was measured (i.e. [MODE_AUTONOMOUS], [MODE_DIFFERENTIAL], or [MODE_ESTIMATED])
+ */
 data class GpsNavInfo(
     val instant: OffsetDateTime,
     val valid: Boolean,
