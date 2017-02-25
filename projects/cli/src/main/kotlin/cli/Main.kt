@@ -71,17 +71,13 @@ fun main(args: Array<String>) {
 
     val payloads = Observable.interval(1, TimeUnit.SECONDS)
         .observeOn(Schedulers.io())
-        .map {
-            val message = wirelessMicrocontroller.receive()
-            Logger.debug("Wireless received ${message.bytes}")
-            message.payload
-        }
+        .map { wirelessMicrocontroller.receive() }
 
     val motions = payloads
         .observeOn(Schedulers.computation())
-        .filter { it.first() != 0.toByte() }
-        .map { bytes ->
-            val msg = DynamicMessage.parseFrom(schema, bytes.sliceArray(1..(bytes.lastIndex - 2)))
+        .filter { it.containsMessage }
+        .map { message ->
+            val msg = DynamicMessage.parseFrom(schema, message.body)
             val msgDoubleField = { name: String ->
                 msg
                     .getField(schema.fields.first { it.name == name })
