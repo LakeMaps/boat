@@ -14,8 +14,8 @@ class WirelessLinkMicrocontroller(override val lock: Lock, override val recv: ()
         return writeMessage(Message(0x00, byteArrayOf(0x00)))
     }
 
-    fun receive(): Message {
-        return writeMessage(Message(0x03, byteArrayOf(0x00)))
+    fun receive(): WirelessLinkReceiveMessage {
+        return WirelessLinkReceiveMessage(writeMessage(Message(0x03, byteArrayOf(0x00))))
     }
 
     fun send(bytes: ByteArray): Message {
