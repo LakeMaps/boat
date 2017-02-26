@@ -28,6 +28,8 @@ dependencies {
     testCompile("org.jetbrains.kotlin:kotlin-test-junit:1.0.6")
 }
 
+tasks["compileKotlin"].dependsOn("generateProto")
+
 addExt("protobuf") {
     val protobuf = ProtobufConfigurator(project, null)
     protobuf.generatedFilesBaseDir = "${projectDir}/src"
