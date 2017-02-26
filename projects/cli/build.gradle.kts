@@ -20,7 +20,6 @@ dependencies {
     compile(project(":microcontrollers"))
     compile(kotlinModule("stdlib"))
     compile("com.fazecast:jSerialComm:1.3.11")
-    compile("com.google.protobuf:protobuf-java:3.1.0")
     compile("org.tinylog:tinylog:1.1")
 }
 
