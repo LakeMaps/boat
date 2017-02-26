@@ -4,6 +4,6 @@ option java_package = "schemas";
 option java_outer_classname = "MotionProtobuf";
 
 message Motion {
-    required float surge = 1;
-    required float yaw = 2;
+    required double surge = 1;
+    required double yaw = 2;
 }
