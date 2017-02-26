@@ -1,6 +1,10 @@
 dist: trusty
 sudo: false
 language: java
+addons:
+    apt:
+        packages:
+            - protobuf-compiler
 
 env:
     global:
