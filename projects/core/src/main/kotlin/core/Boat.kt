@@ -56,8 +56,8 @@ class Boat(private val broadcast: Broadcast, private val props: Pair<Propeller, 
         r = surge + yaw
         l = surge - yaw
 
-        val maxInputMagnitude = arrayListOf(Math.abs(surge), Math.abs(yaw)).max()!!
-        val maxThrustMagnitude = arrayListOf(Math.abs(r), Math.abs(l)).max()!!
+        val maxInputMagnitude = maxOf(Math.abs(surge), Math.abs(yaw))
+        val maxThrustMagnitude = maxOf(Math.abs(r), Math.abs(l))
         val scalar = maxInputMagnitude / maxThrustMagnitude
 
         r *= scalar
