@@ -13,7 +13,6 @@ import java.util.concurrent.TimeUnit
 import java.util.concurrent.locks.ReentrantLock
 
 import com.fazecast.jSerialComm.SerialPort
-import com.google.protobuf.DynamicMessage
 import org.pmw.tinylog.Logger
 import rx.Observable
 import rx.broadcast.InMemoryBroadcast
