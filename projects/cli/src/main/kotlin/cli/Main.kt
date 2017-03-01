@@ -62,7 +62,7 @@ fun main(args: Array<String>) {
 
     motions.subscribe { motion ->
         Logger.debug("Broadcasting $motion")
-        broadcast.send(motion)
+        broadcast.send(motion).subscribe()
     }
 
     CountDownLatch(1).await()
