@@ -38,7 +38,7 @@ internal interface Microcontroller {
                         return message
                     }
 
-                    // Message is corrupt
+                    System.err.println("Received corrupt message ${message}")
                     MessageState.Started()
                 }
             }
