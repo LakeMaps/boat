@@ -57,6 +57,7 @@ fun main(args: Array<String>) {
     val motions = payloads
         .observeOn(Schedulers.computation())
         .filter { it.containsMessage }
+        .doOnNext { Logger.info("RSSI\t${it.rssi}") }
         .map { Motion.decode(it.body) }
 
     motions.subscribe { motion ->
