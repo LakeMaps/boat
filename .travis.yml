@@ -8,7 +8,7 @@ addons:
 
 env:
     global:
-        - GRADLE_VERSION='3.5-20170224224706+0000'
+        - GRADLE_VERSION='3.5-20170301151618+0000'
         - GRADLE_DISTRIBUTION_URL="https://repo.gradle.org/gradle/dist-snapshots/gradle-script-kotlin-$GRADLE_VERSION-bin.zip"
         - TERM=dumb
 jdk:
