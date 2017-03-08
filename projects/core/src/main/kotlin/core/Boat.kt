@@ -37,6 +37,8 @@ class Boat(private val broadcast: Broadcast, private val props: Pair<Propeller, 
                 break
             }
         }
+
+        tick(speed(Motion(0.0, 0.0)))
     }
 
     private fun tick(outputs: Pair<Double, Double>) {
