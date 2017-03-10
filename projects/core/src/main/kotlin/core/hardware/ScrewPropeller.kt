@@ -8,6 +8,7 @@ class ScrewPropeller(val controller: PropulsionMicrocontroller, val index: Int) 
     override var speed: Double
         get() = s
         set(value) {
+            s = value
             val output = rangeMap(value, -1.0..1.0, PropulsionMicrocontroller.OUTPUT_RANGE).toShort()
             when (index) {
                 0 -> controller.setSpeed(output, 0)
