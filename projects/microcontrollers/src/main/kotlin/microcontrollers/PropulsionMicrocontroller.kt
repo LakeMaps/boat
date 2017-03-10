@@ -4,6 +4,10 @@ import java.nio.ByteBuffer
 import java.util.concurrent.locks.Lock
 
 class PropulsionMicrocontroller(override val lock: Lock, override val recv: () -> Byte, override val send: (ByteArray) -> Unit) : Microcontroller {
+    companion object {
+        val OUTPUT_RANGE = -255.0..255.0
+    }
+
     override val payloadSizes: Map<Byte, Int> = mapOf(
         0x10.toByte() to 1,
         0x13.toByte() to 4,
