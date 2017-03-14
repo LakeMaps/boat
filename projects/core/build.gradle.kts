@@ -36,7 +36,7 @@ tasks.withType<Test> {
     })
 }
 
-tasks["compileKotlin"].dependsOn("generateProto")
+tasks.get("compileKotlin").dependsOn("generateProto")
 
 addExt("protobuf") {
     val protobuf = ProtobufConfigurator(project, null)
