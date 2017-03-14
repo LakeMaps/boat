@@ -1,5 +1,5 @@
-include "core"
 include "cli"
+include "core"
 include "gps"
 include "microcontrollers"
 
