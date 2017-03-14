@@ -13,6 +13,7 @@ plugins {
 
 apply {
     plugin("kotlin")
+    plugin("kotlin-kapt")
 }
 
 dependencies {
@@ -20,6 +21,7 @@ dependencies {
     compile(project(":core"))
     compile(project(":microcontrollers"))
     compile("org.openjdk.jmh:jmh-core:1.18")
+    kapt("org.openjdk.jmh:jmh-generator-annprocess:1.18")
 }
 
 configure<ApplicationPluginConvention> {
