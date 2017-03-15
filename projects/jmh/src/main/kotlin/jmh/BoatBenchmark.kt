@@ -1,7 +1,6 @@
 package jmh
 
 import core.Boat
-import core.hardware.Propeller
 import core.values.Motion
 
 import org.openjdk.jmh.annotations.Benchmark
@@ -25,13 +24,6 @@ import java.util.concurrent.TimeUnit
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
 open class BoatBenchmark {
-    class NullPropeller : Propeller {
-        private var s = 0.0
-        override var speed
-            get() = s
-            set(value) { s = value }
-    }
-
     var surge = Math.PI
 
     var yaw = Math.PI
