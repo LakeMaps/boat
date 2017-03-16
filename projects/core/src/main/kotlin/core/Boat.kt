@@ -21,10 +21,12 @@ class Boat(private val broadcast: Broadcast, private val props: Pair<Propeller, 
 
     fun start(io: Scheduler, clock: Scheduler) {
         val speeds = broadcast.valuesOfType(Motion::class.java)
+            .startWith(Motion(0.0, 0.0))
             .map { speed(it) }
+            .onBackpressureLatest()
         val ticks = Observable.interval(SLEEP_DURATION_MS, TimeUnit.MILLISECONDS, clock)
 
-        Observable.combineLatest(ticks, speeds, { _, s -> s })
+        ticks.withLatestFrom(speeds, { _, s -> s })
             .observeOn(io)
             .takeUntil(killSwitch)
             .subscribe({ this.tick(it) }, { RuntimeException(it) }, { dead.set(true) })
