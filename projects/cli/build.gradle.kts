@@ -17,6 +17,7 @@ apply {
 
 dependencies {
     compile(project(":core"))
+    compile(project(":log"))
     compile(project(":microcontrollers"))
     compile(kotlinModule("stdlib"))
     compile("com.fazecast:jSerialComm:1.3.11")
