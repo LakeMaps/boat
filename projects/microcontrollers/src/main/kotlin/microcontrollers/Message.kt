@@ -14,6 +14,8 @@ class Message(val command: Byte, val payload: ByteArray) {
         bytes.sliceArray((bytes.lastIndex - 1)..bytes.lastIndex)
     }
 
+    override fun toString() = "Message(command=0x${command.hex()}, payload=0x${payload.hex()}, checksum=0x${checksum.hex()})"
+
     private fun crc16(bytes: ByteArray): ByteArray {
         var result: Int = 0
         for (b in bytes.map(Byte::toInt)) {
