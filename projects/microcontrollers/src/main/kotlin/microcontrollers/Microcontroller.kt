@@ -1,5 +1,7 @@
 package microcontrollers
 
+import log.Log
+
 import java.nio.ByteBuffer
 import java.util.Arrays
 import java.util.concurrent.locks.Lock
@@ -38,7 +40,7 @@ internal interface Microcontroller {
                         return message
                     }
 
-                    System.err.println("Received corrupt message ${message}")
+                    Log.w { "Received incorrect checksum 0x${nextTwoBytes.hex()} for $message" }
                     MessageState.Started()
                 }
             }

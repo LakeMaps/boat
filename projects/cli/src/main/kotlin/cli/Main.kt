@@ -5,6 +5,7 @@ package cli
 import core.Boat
 import core.hardware.ScrewPropeller
 import core.values.Motion
+import log.Log
 import microcontrollers.PropulsionMicrocontroller
 import microcontrollers.WirelessLinkMicrocontroller
 
@@ -13,7 +14,6 @@ import java.util.concurrent.TimeUnit
 import java.util.concurrent.locks.ReentrantLock
 
 import com.fazecast.jSerialComm.SerialPort
-import org.pmw.tinylog.Logger
 import rx.Observable
 import rx.broadcast.InMemoryBroadcast
 import rx.schedulers.Schedulers
@@ -34,7 +34,7 @@ private fun serialPort(name: String, baudRate: Int = 115200): Triple<SerialPort,
 
 fun main(args: Array<String>) {
     if (!args.any()) {
-        System.err.println("Missing filename for wireless and prop serial ports")
+        Log.wtf { "Missing filename for wireless and prop serial ports" }
         return
     }
 
@@ -57,11 +57,11 @@ fun main(args: Array<String>) {
     val motions = payloads
         .observeOn(Schedulers.computation())
         .filter { it.containsMessage }
-        .doOnNext { Logger.info("RSSI\t${it.rssi}") }
+        .doOnNext { Log.d { "RSSI\t${it.rssi}" } }
         .map { Motion.decode(it.body) }
 
     motions.subscribe { motion ->
-        Logger.debug("Broadcasting $motion")
+        Log.d { "Broadcasting $motion" }
         broadcast.send(motion).subscribe()
     }
 

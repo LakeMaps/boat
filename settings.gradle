@@ -2,6 +2,7 @@ include "cli"
 include "core"
 include "gps"
 include "jmh"
+include "log"
 include "microcontrollers"
 
 rootProject.name = "boat"

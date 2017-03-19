@@ -1,5 +1,7 @@
 package microcontrollers
 
+import log.Log
+
 internal sealed class MessageState {
     class Started : MessageState() {
         fun next(recv: () -> Byte, buffer: (Byte) -> Unit): MessageState {
@@ -9,7 +11,7 @@ internal sealed class MessageState {
                 buffer(byte)
                 return MessageState.Command()
             } else {
-                // This isn't the byte we're looking for
+                Log.d { "Skipping 0x${byte.hex()} in search of message start byte" }
                 return MessageState.Started()
             }
         }
@@ -20,7 +22,7 @@ internal sealed class MessageState {
             buffer(command)
 
             if (!payloadSizes.containsKey(command)) {
-                // Invalid command received
+                Log.w { "Received Invalid command byte 0x${command.hex()}" }
                 return MessageState.Started()
             } else {
                 val payloadSize = payloadSizes[command]!!
