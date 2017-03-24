@@ -18,6 +18,14 @@ import rx.Observable
 import rx.broadcast.InMemoryBroadcast
 import rx.schedulers.Schedulers
 
+const val STARTUP_MESSAGE = """
+                  ______
+          _______/ooo__\\_______
+          \                   |]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Lake Maps NL boat control software
+"""
+
 private fun serialPort(name: String, baudRate: Int = 115200): Triple<SerialPort, () -> Byte, (ByteArray) -> Unit> {
     val serialPort = SerialPort.getCommPort(name)
     serialPort.baudRate = baudRate
@@ -65,5 +73,6 @@ fun main(args: Array<String>) {
         broadcast.send(motion).subscribe()
     }
 
+    Log.d { STARTUP_MESSAGE }
     CountDownLatch(1).await()
 }
