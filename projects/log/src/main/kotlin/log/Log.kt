@@ -11,21 +11,21 @@ class Log {
         fun wtf(msg: () -> String) {
             when { level < Level.ERROR -> return }
 
-            System.err.println(formatted(msg))
+            System.err.println(formatted(Level.ERROR, msg))
         }
 
         fun w(msg: () -> String) {
             when { level < Level.WARNING -> return }
 
-            System.err.println(formatted(msg))
+            System.err.println(formatted(Level.WARNING, msg))
         }
 
         fun d(msg: () -> String) {
             when { level < Level.DEBUG -> return }
 
-            println(formatted(msg = msg))
+            println(formatted(Level.DEBUG, msg))
         }
 
-        internal inline fun formatted(msg: () -> String) = "$level,${LocalDateTime.now()}\t${msg()}"
+        internal inline fun formatted(level: Level, msg: () -> String) = "$level,${LocalDateTime.now()}\t${msg()}"
     }
 }

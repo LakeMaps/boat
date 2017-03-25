@@ -55,4 +55,32 @@ class WirelessLinkMicrocontrollerTest {
         CollectionAssertionSession(sent).shouldBe(expectedSend.asIterable())
         CollectionAssertionSession(message.bytes.asIterable()).shouldBe(expectedRecv.asIterable())
     }
+
+    @Test(timeout = 10000)
+    fun receiveWithChecksumFailureDoesReturnAnEmptyMessage() {
+        val expectedRecv = byteArrayOf(0xAA.toByte(), 0x0F, 0x01, 0x7A, 0x42)
+
+        var recvCallCount = 0
+        val recv = { expectedRecv[recvCallCount++] }
+        val microcontroller = WirelessLinkMicrocontroller(
+            ReentrantLock(), recv, { /* empty */ })
+
+        val message = microcontroller.receive()
+        CollectionAssertionSession(message.bytes.asIterable())
+            .shouldBe((byteArrayOf(0xAA.toByte(), 0x03) + ByteArray(64, { 0x00 }) + byteArrayOf(0x5D, 0xBC.toByte())).asIterable())
+    }
+
+    @Test(timeout = 10000)
+    fun sendWithChecksumFailureDoesReturnAnEmptyMessage() {
+        val expectedRecv = byteArrayOf(0xAA.toByte(), 0x0F, 0x01, 0x7A, 0x42)
+
+        var recvCallCount = 0
+        val recv = { expectedRecv[recvCallCount++] }
+        val microcontroller = WirelessLinkMicrocontroller(
+            ReentrantLock(), recv, { /* empty */ })
+
+        val message = microcontroller.send(ByteArray(61, { 0x42 }))
+        CollectionAssertionSession(message.bytes.asIterable())
+            .shouldBe(byteArrayOf(0xAA.toByte(), 0x04, 0x00, 0xB6.toByte(), 0x99.toByte()).asIterable())
+    }
 }
