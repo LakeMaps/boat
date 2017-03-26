@@ -7,6 +7,10 @@ import core.values.Motion
 import microcontrollers.PropulsionMicrocontroller
 import microcontrollers.WirelessLinkMicrocontroller
 
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
+import java.util.concurrent.locks.ReentrantLock
+
 import org.openjdk.jmh.annotations.Benchmark
 import org.openjdk.jmh.annotations.BenchmarkMode
 import org.openjdk.jmh.annotations.Fork
@@ -21,10 +25,6 @@ import rx.Observable
 import rx.broadcast.InMemoryBroadcast
 import rx.schedulers.Schedulers
 import rx.schedulers.TestScheduler
-
-import java.util.concurrent.CountDownLatch
-import java.util.concurrent.TimeUnit
-import java.util.concurrent.locks.ReentrantLock
 
 @Fork(1)
 @Measurement(iterations = 20)

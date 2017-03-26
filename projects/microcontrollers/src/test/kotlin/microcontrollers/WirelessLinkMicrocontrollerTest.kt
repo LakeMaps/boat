@@ -2,10 +2,12 @@
 
 package microcontrollers
 
-import org.junit.Test
-import java.util.concurrent.locks.ReentrantLock
 import kotlin.test.CollectionAssertionSession
 import kotlin.test.shouldBe
+
+import java.util.concurrent.locks.ReentrantLock
+
+import org.junit.Test
 
 class WirelessLinkMicrocontrollerTest {
     @Test(timeout = 10000)

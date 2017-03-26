@@ -2,9 +2,10 @@
 
 package microcontrollers
 
-import org.junit.Test
 import kotlin.test.CollectionAssertionSession
 import kotlin.test.shouldBe
+
+import org.junit.Test
 
 class MessageTest {
     @Test

@@ -2,11 +2,13 @@
 
 package microcontrollers
 
-import org.junit.Test
-import java.util.concurrent.locks.Lock
-import java.util.concurrent.locks.ReentrantLock
 import kotlin.test.CollectionAssertionSession
 import kotlin.test.shouldBe
+
+import java.util.concurrent.locks.Lock
+import java.util.concurrent.locks.ReentrantLock
+
+import org.junit.Test
 
 private class SimpleMicrocontroller(
     override val lock: Lock,

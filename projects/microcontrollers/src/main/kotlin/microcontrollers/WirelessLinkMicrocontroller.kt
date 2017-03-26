@@ -1,6 +1,7 @@
 package microcontrollers
 
 import log.Log
+
 import java.util.concurrent.locks.Lock
 
 class WirelessLinkMicrocontroller(override val lock: Lock, override val recv: () -> Byte, override val send: (ByteArray) -> Unit) : Microcontroller {

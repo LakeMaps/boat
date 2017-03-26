@@ -5,6 +5,9 @@ import microcontrollers.PropulsionMicrocontroller
 import microcontrollers.WirelessLinkMicrocontroller
 import microcontrollers.WirelessLinkReceiveMessage
 
+import java.util.concurrent.TimeUnit
+import java.util.concurrent.locks.ReentrantLock
+
 import org.openjdk.jmh.annotations.Benchmark
 import org.openjdk.jmh.annotations.BenchmarkMode
 import org.openjdk.jmh.annotations.Fork
@@ -15,9 +18,6 @@ import org.openjdk.jmh.annotations.Scope
 import org.openjdk.jmh.annotations.State
 import org.openjdk.jmh.annotations.Warmup
 import org.openjdk.jmh.infra.Blackhole
-
-import java.util.concurrent.TimeUnit
-import java.util.concurrent.locks.ReentrantLock
 
 @Fork(1)
 @Measurement(iterations = 20)
