@@ -61,6 +61,7 @@ fun main(args: Array<String>) {
     val payloads = Observable.interval(10, TimeUnit.MILLISECONDS)
         .observeOn(Schedulers.io())
         .map { wirelessMicrocontroller.receive() }
+        .onBackpressureLatest()
 
     val motions = payloads
         .observeOn(Schedulers.computation())
