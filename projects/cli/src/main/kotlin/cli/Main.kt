@@ -58,7 +58,7 @@ fun main(args: Array<String>) {
     Runtime.getRuntime().addShutdownHook(Thread({ boat.shutdown() }))
     boat.start(io = Schedulers.io(), clock = Schedulers.computation())
 
-    val payloads = Observable.interval(30, TimeUnit.MILLISECONDS)
+    val payloads = Observable.interval(boat.SLEEP_DURATION_MS, TimeUnit.MILLISECONDS)
         .observeOn(Schedulers.io())
         .map { wirelessMicrocontroller.receive() }
         .onBackpressureLatest()
