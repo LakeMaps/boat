@@ -5,7 +5,7 @@ import java.util.concurrent.locks.Lock
 
 class PropulsionMicrocontroller(override val lock: Lock, override val recv: () -> Byte, override val send: (ByteArray) -> Unit) : Microcontroller {
     companion object {
-        val OUTPUT_RANGE = -255.0..255.0
+        val OUTPUT_RANGE = -127.0..127.0
     }
 
     override val payloadSizes: Map<Byte, Int> = mapOf(
