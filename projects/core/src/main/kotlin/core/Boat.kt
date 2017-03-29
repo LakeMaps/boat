@@ -55,7 +55,9 @@ class Boat(private val broadcast: Broadcast, private val props: Pair<Propeller, 
         var l: Double
         val (surge, yaw) = motion
 
-        if (surge == 0.0 && yaw == 0.0) return Pair(0.0, 0.0)
+        if (surge == 0.0 && yaw == 0.0) {
+            return Pair(0.0, 0.0)
+        }
 
         r = surge + yaw
         l = surge - yaw
