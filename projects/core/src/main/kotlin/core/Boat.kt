@@ -13,7 +13,7 @@ import rx.subjects.PublishSubject
 import rx.subjects.Subject
 
 class Boat(private val broadcast: Broadcast, private val props: Pair<Propeller, Propeller>) {
-    val SLEEP_DURATION_MS = (System.getenv("SLEEP_DURATION_MS") ?: "16").toLong()
+    val SLEEP_DURATION_MS = 30L
 
     private val dead = AtomicBoolean()
 
