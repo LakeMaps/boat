@@ -29,7 +29,7 @@ class Boat(private val broadcast: Broadcast, private val props: Pair<Propeller, 
         ticks.withLatestFrom(speeds, { _, s -> s })
             .observeOn(io)
             .takeUntil(killSwitch)
-            .subscribe({ this.tick(it) }, { RuntimeException(it) }, { dead.set(true) })
+            .subscribe(this::tick, this::fail, { dead.set(true) })
     }
 
     fun shutdown() {
@@ -71,4 +71,6 @@ class Boat(private val broadcast: Broadcast, private val props: Pair<Propeller, 
 
         return Pair(l, r)
     }
+
+    private fun fail(exception: Throwable): Nothing = throw RuntimeException(exception)
 }
