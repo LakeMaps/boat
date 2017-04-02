@@ -72,6 +72,7 @@ fun main(args: Array<String>) {
     motions.subscribe { motion ->
         Log.d { "Broadcasting $motion" }
         broadcast.send(motion).subscribe()
+        wirelessMicrocontroller.send(motion.encode())
     }
 
     Log.d { STARTUP_MESSAGE }
