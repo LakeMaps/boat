@@ -10,4 +10,6 @@ rootProject.buildFileName = "build.gradle.kts"
 rootProject.children.each {
     it.projectDir = new File("projects/${it.name}")
     it.buildFileName = "build.gradle.kts"
+    assert it.projectDir.isDirectory()
+    assert it.buildFile.isFile()
 }
