@@ -25,5 +25,7 @@ dependencies {
 }
 
 configure<ApplicationPluginConvention> {
+    applicationName = rootProject.name
+    version = rootProject.version
     mainClassName = "cli.Main"
 }
