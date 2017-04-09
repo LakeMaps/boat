@@ -1,0 +1,13 @@
+syntax = "proto2";
+
+option java_package = "schemas";
+option java_outer_classname = "GpsProtobuf";
+
+import "schemas/Position.proto";
+import "schemas/Velocity.proto";
+
+message Gps {
+    required float horizontal_dilution_of_precision = 1;
+    required Position position = 2;
+    required Velocity velocity = 3;
+}
