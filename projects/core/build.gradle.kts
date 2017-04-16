@@ -2,8 +2,6 @@ import com.google.protobuf.gradle.ProtobufConfigurator
 import org.gradle.api.tasks.testing.Test
 import org.gradle.api.tasks.testing.logging.TestLogging
 
-fun addExt(name: String, f: () -> Any) = project.extensions.add(name, f())
-
 buildscript {
     repositories {
         gradleScriptKotlin()
@@ -36,10 +34,7 @@ tasks.withType<Test> {
     })
 }
 
+val protobuf = ProtobufConfigurator(project, null)
+protobuf.generatedFilesBaseDir = "${projectDir}/src"
+project.extensions.add("protobuf", protobuf)
 tasks.get("compileKotlin").dependsOn("generateProto")
-
-addExt("protobuf") {
-    val protobuf = ProtobufConfigurator(project, null)
-    protobuf.generatedFilesBaseDir = "${projectDir}/src"
-    protobuf
-}
