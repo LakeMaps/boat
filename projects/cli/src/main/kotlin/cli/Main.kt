@@ -33,8 +33,8 @@ fun main(args: Array<String>) {
 
     val broadcast = InMemoryBroadcast()
 
-    val wSerialPort = SerialPort(args[0], baudRate = 115200)
-    val pSerialPort = SerialPort(args[1], baudRate = 115200)
+    val wSerialPort = SerialPort(args[0], baudRate = 57600)
+    val pSerialPort = SerialPort(args[1], baudRate = 57600)
     val wirelessMicrocontroller = WirelessLinkMicrocontroller(ReentrantLock(), wSerialPort::recv, wSerialPort::send)
     val propulsionMicrocontroller = PropulsionMicrocontroller(ReentrantLock(), pSerialPort::recv, pSerialPort::send)
 
