@@ -13,7 +13,6 @@ import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.locks.ReentrantLock
 
-import com.fazecast.jSerialComm.SerialPort
 import rx.Observable
 import rx.broadcast.InMemoryBroadcast
 import rx.schedulers.Schedulers
@@ -26,32 +25,19 @@ const val STARTUP_MESSAGE = """
     Lake Maps NL boat control software
 """
 
-private fun serialPort(name: String, baudRate: Int = 115200): Triple<SerialPort, () -> Byte, (ByteArray) -> Unit> {
-    val serialPort = SerialPort.getCommPort(name)
-    serialPort.baudRate = baudRate
-    serialPort.openPort()
-    serialPort.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING, 0, 0)
-    val recv: () -> Byte = {
-        val buffer = ByteArray(1)
-        serialPort.readBytes(buffer, 1)
-        buffer.first()
-    }
-    val send: (ByteArray) -> Unit = { serialPort.writeBytes(it, it.size.toLong()) }
-    return Triple(serialPort, recv, send)
-}
-
 fun main(args: Array<String>) {
     if (!args.any()) {
         Log.wtf { "Missing filename for wireless and prop serial ports" }
         return
     }
 
-    val (_, wsRecv, wsSend) = serialPort(args[0])
-    val wirelessMicrocontroller = WirelessLinkMicrocontroller(ReentrantLock(), wsRecv, wsSend)
-    val (_, psRecv, psSend) = serialPort(args[1])
-    val propulsionMicrocontroller = PropulsionMicrocontroller(ReentrantLock(), psRecv, psSend)
-
     val broadcast = InMemoryBroadcast()
+
+    val wSerialPort = SerialPort(args[0], baudRate = 115200)
+    val pSerialPort = SerialPort(args[1], baudRate = 115200)
+    val wirelessMicrocontroller = WirelessLinkMicrocontroller(ReentrantLock(), wSerialPort::recv, wSerialPort::send)
+    val propulsionMicrocontroller = PropulsionMicrocontroller(ReentrantLock(), pSerialPort::recv, pSerialPort::send)
+
     val props = Pair(ScrewPropeller(propulsionMicrocontroller, 0), ScrewPropeller(propulsionMicrocontroller, 1))
     val boat = Boat(broadcast, props)
 
