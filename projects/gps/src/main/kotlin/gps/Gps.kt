@@ -58,16 +58,16 @@ class Gps(recv: () -> Char, private val callback: (Any) -> Unit) {
 
     internal fun gsv(sentence: Sentence): GpsSatellitesInView {
         val channel1Id = sentence.intOrNull( 3)
-        val channel1 = channel1Id?.let { GpsSatelliteMessage(it, sentence.intOrNull( 4), sentence.intOrNull( 5), sentence.int( 6)) }
+        val channel1 = channel1Id?.let { GpsSatelliteMessage(it, sentence.intOrNull( 4), sentence.intOrNull( 5), sentence.intOrNull( 6)) }
 
         val channel2Id = sentence.intOrNull( 7)
-        val channel2 = channel2Id?.let { GpsSatelliteMessage(it, sentence.intOrNull( 8), sentence.intOrNull( 9), sentence.int(10)) }
+        val channel2 = channel2Id?.let { GpsSatelliteMessage(it, sentence.intOrNull( 8), sentence.intOrNull( 9), sentence.intOrNull(10)) }
 
         val channel3Id = sentence.intOrNull(11)
-        val channel3 = channel3Id?.let { GpsSatelliteMessage(it, sentence.intOrNull(12), sentence.intOrNull(13), sentence.int(14)) }
+        val channel3 = channel3Id?.let { GpsSatelliteMessage(it, sentence.intOrNull(12), sentence.intOrNull(13), sentence.intOrNull(14)) }
 
         val channel4Id = sentence.intOrNull(15)
-        val channel4 = channel4Id?.let { GpsSatelliteMessage(it, sentence.intOrNull(16), sentence.intOrNull(17), sentence.int(18)) }
+        val channel4 = channel4Id?.let { GpsSatelliteMessage(it, sentence.intOrNull(16), sentence.intOrNull(17), sentence.intOrNull(18)) }
 
         return GpsSatellitesInView(sentence.int(0), sentence.int(1), sentence.int(2), channel1, channel2, channel3, channel4)
     }

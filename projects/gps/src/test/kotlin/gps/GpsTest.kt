@@ -147,4 +147,18 @@ class GpsTest {
 
         Assert.assertEquals(expected, gsa)
     }
+
+    @Test
+    fun testGsvSentenceMissingSomeSignalNoiseRatio() {
+        val channel1 = GpsSatelliteMessage(8, 78, 253, null)
+        val channel2 = GpsSatelliteMessage(27, 60, 55, 21)
+        val channel3 = GpsSatelliteMessage(7, 56, 280, null)
+        val channel4 = GpsSatelliteMessage(16, 34, 98, 23)
+        val expectedGsv = GpsSatellitesInView(3, 1, 12, channel1, channel2, channel3, channel4)
+
+        val gps = Gps({ '?' }, { })
+        val gsv = gps.gsv(Sentence("GP", "GSV", arrayOf("3", "1", "12", "08", "78", "253", "", "27", "60", "055", "21", "07", "56", "280", "", "16", "34", "098", "23")))
+
+        Assert.assertEquals(expectedGsv, gsv)
+    }
 }
