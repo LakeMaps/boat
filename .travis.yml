@@ -13,8 +13,7 @@ install:
 before_script:
     - protoc --version
 script:
-    - mkdir -p "build/${PROTOC_OUT}"
-    - protoc "--${PROTOC_OUT}_out=build/${PROTOC_OUT}" schemas/*.proto
+    - protoc "--${PROTOC_OUT}_out=${PROTOC_OUT_OPTIONS}./" schemas/*.proto
 
 notifications:
     email: false
