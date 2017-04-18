@@ -1,0 +1,9 @@
+syntax = "proto2";
+
+option java_package = "schemas";
+option java_outer_classname = "VelocityProtobuf";
+
+message Velocity {
+    required double speed = 1;
+    required double true_bearing = 2;
+}
