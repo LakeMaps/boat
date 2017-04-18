@@ -10,7 +10,7 @@ env:
     - PROTOC_OUT=python
 script:
     - mkdir -p "build/${PROTOC_OUT}"
-    - protoc "--${PROTOC_OUT}_out=build/${PROTOC_OUT}" src/*.proto
+    - protoc "--${PROTOC_OUT}_out=build/${PROTOC_OUT}" schemas/*.proto
 
 notifications:
     email: false
