@@ -3,6 +3,7 @@ sudo: false
 language: generic
 env:
     - PROTOC_OUT=cpp
+    - PROTOC_OUT=js PROTOC_OUT_OPTIONS="import_style=commonjs,binary:"
     - PROTOC_OUT=python
 install:
     - export PROTOC_VERSION='3.2.0'
