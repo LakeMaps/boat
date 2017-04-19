@@ -8,6 +8,8 @@ addons:
 env:
     - PROTOC_OUT=cpp
     - PROTOC_OUT=python
+before_script:
+    - protoc --version
 script:
     - mkdir -p "build/${PROTOC_OUT}"
     - protoc "--${PROTOC_OUT}_out=build/${PROTOC_OUT}" schemas/*.proto
