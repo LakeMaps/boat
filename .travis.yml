@@ -1,13 +1,15 @@
 dist: trusty
 sudo: false
 language: generic
-addons:
-    apt:
-        packages:
-            - protobuf-compiler
 env:
     - PROTOC_OUT=cpp
     - PROTOC_OUT=python
+install:
+    - export PROTOC_VERSION='3.2.0'
+    - curl -sSLO "https://github.com/google/protobuf/releases/download/v3.2.0/protoc-${PROTOC_VERSION}-linux-x86_64.zip"
+    - mkdir protoc
+    - unzip -d protoc "protoc-${PROTOC_VERSION}-linux-x86_64.zip"
+    - export PATH="${PATH}:${PWD}/protoc/bin"
 before_script:
     - protoc --version
 script:
