@@ -2,9 +2,9 @@
   "name": "@lakemaps/schemas",
   "description": "Lake Maps' message schemas",
   "license": "OSL-3.0",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "scripts": {
-     "build": "protoc --js_out='import_style=commonjs,binary:./' schemas/*.proto"
+    "build": "protoc --js_out='import_style=commonjs,binary:./' schemas/*.proto"
   },
   "dependencies": {
     "google-protobuf": "^3.2.0"
