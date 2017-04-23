@@ -1,0 +1,10 @@
+syntax = "proto2";
+
+option java_package = "schemas";
+option java_outer_classname = "PositionProtobuf";
+
+message Position {
+    required double elevation = 1;
+    required double longitude = 2;
+    required double latitude = 3;
+}
