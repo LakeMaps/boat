@@ -5,7 +5,7 @@
   "version": "3.1.0",
   "scripts": {
     "build": "protoc --js_out='import_style=commonjs,binary:./' schemas/*.proto",
-    "prepublish": "npm run build"
+    "prepublishOnly": "npm run build"
   },
   "dependencies": {
     "google-protobuf": "^3.2.0"
