@@ -8,8 +8,8 @@ addons:
 
 env:
     global:
-        - GRADLE_VERSION='3.5-20170305000422+0000'
-        - GRADLE_DISTRIBUTION_URL="https://repo.gradle.org/gradle/dist-snapshots/gradle-script-kotlin-$GRADLE_VERSION-bin.zip"
+        - GRADLE_VERSION='3.5'
+        - GRADLE_DISTRIBUTION_URL="https://services.gradle.org/distributions/gradle-$GRADLE_VERSION-bin.zip"
         - TERM=dumb
 jdk:
     - oraclejdk8
