@@ -53,11 +53,12 @@ fun main(args: Array<String>) {
         .observeOn(Schedulers.computation())
         .filter { it.containsMessage }
         .doOnNext { Log.d { "RSSI\t${it.rssi}" } }
-        .map { Motion.decode(it.body) }
+        .map { Pair(it.body, Motion.decode(it.body)) }
 
-    motions.subscribe { motion ->
+    motions.subscribe { (body, motion) ->
         Log.d { "Broadcasting $motion" }
         broadcast.send(motion).subscribe()
+        wirelessMicrocontroller.send(body)
     }
 
     Log.d { STARTUP_MESSAGE }
