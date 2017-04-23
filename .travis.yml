@@ -24,6 +24,7 @@ before_install:
     - export PATH="${HOME}/gradle/bin:${PATH}"
     - hash -r
     - gradle --version
+    - protoc --version
 script:
     - gradle build
 

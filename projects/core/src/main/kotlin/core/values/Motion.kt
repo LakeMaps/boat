@@ -15,12 +15,4 @@ data class Motion(val surge: Double, val yaw: Double) {
             return Motion(protobuf.surge, protobuf.yaw)
         }
     }
-
-    fun encode(): ByteArray {
-        return MotionProtobuf.Motion.newBuilder()
-            .setSurge(surge)
-            .setYaw(yaw)
-            .build()
-            .toByteArray()
-    }
 }

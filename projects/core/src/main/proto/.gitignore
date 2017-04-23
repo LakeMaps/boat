@@ -1,2 +1,2 @@
-build/
+*.tgz
 node_modules/

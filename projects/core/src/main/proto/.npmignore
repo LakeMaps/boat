@@ -1,0 +1,7 @@
+*.tgz
+.editorconfig
+.gitattributes
+.gitignore
+.npmignore
+.travis.yml
+node_modules/

@@ -1,7 +1,10 @@
 package core
 
 import core.hardware.Propeller
+import core.values.GpsValue
 import core.values.Motion
+import gps.GpsFix
+import gps.GpsNavInfo
 
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
@@ -25,6 +28,16 @@ class Boat(private val broadcast: Broadcast, private val props: Pair<Propeller, 
             .map { speed(it) }
             .onBackpressureLatest()
         val ticks = Observable.interval(SLEEP_DURATION_MS, TimeUnit.MILLISECONDS, clock)
+        val positions = Observable.combineLatest(
+            broadcast.valuesOfType(GpsFix::class.java),
+            broadcast.valuesOfType(GpsNavInfo::class.java),
+            { fix, nav -> Pair(fix, nav)}
+        )
+
+        positions.observeOn(io)
+            .subscribe { (fix, nav) ->
+                GpsValue.from(nav, fix).let { broadcast.send(it).toBlocking().subscribe() }
+            }
 
         ticks.withLatestFrom(speeds, { _, s -> s })
             .observeOn(io)
