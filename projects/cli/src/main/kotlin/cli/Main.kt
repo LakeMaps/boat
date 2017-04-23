@@ -2,6 +2,7 @@
 
 package cli
 
+import com.google.protobuf.InvalidProtocolBufferException
 import core.Boat
 import core.hardware.ScrewPropeller
 import core.values.Motion
@@ -53,7 +54,14 @@ fun main(args: Array<String>) {
         .observeOn(Schedulers.computation())
         .filter { it.containsMessage }
         .doOnNext { Log.d { "RSSI\t${it.rssi}" } }
-        .map { Motion.decode(it.body) }
+        .map { try {
+            Motion.decode(it.body)
+        } catch (e: InvalidProtocolBufferException) {
+            Log.w { "$e" }
+            null
+        } }
+        .filter { it != null }
+        .map { it!! }
 
     motions.subscribe { motion ->
         Log.d { "Broadcasting $motion" }
