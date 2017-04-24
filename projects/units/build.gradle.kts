@@ -1,0 +1,27 @@
+import org.gradle.api.tasks.testing.Test
+import org.gradle.api.tasks.testing.logging.TestLogging
+
+buildscript {
+    repositories {
+        gradleScriptKotlin()
+    }
+    dependencies {
+        classpath(kotlinModule("gradle-plugin"))
+    }
+}
+
+apply {
+    plugin("kotlin")
+}
+
+dependencies {
+    compile(kotlinModule("stdlib"))
+    testCompile("junit:junit:4.12")
+}
+
+tasks.withType<Test> {
+    testLogging(closureOf<TestLogging> {
+        showStandardStreams = true
+        events("passed", "skipped", "failed")
+    })
+}
