@@ -16,6 +16,7 @@ apply {
 
 dependencies {
     compile(kotlinModule("stdlib"))
+    compile(project(":units"))
     testCompile("junit:junit:4.12")
     testCompile("org.jetbrains.kotlin:kotlin-test-junit:1.0.6")
 }
