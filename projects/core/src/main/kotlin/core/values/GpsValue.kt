@@ -1,6 +1,5 @@
 package core.values
 
-import core.dd
 import gps.GpsFix
 import gps.GpsNavInfo
 import schemas.GpsProtobuf
@@ -24,8 +23,8 @@ data class GpsValue(val horizontalDilutionOfPrecision: Float, val position: Posi
                 && speed != null
                 && course != null
             ) {
-                val position = Position(dd(longitude.toFloat()), dd(latitude.toFloat()), altitude.toFloat())
-                GpsValue(hdop.toFloat(), position, Velocity(speed.toFloat(), course.toFloat()))
+                val position = Position(longitude.value.toFloat(), latitude.value.toFloat(), altitude.value.toFloat())
+                GpsValue(hdop.toFloat(), position, Velocity(speed.value.toFloat(), course.value.toFloat()))
             } else {
                 null
             }
