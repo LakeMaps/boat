@@ -4,6 +4,7 @@ include "gps"
 include "jmh"
 include "log"
 include "microcontrollers"
+include "units"
 
 rootProject.name = "boat"
 rootProject.buildFileName = "build.gradle.kts"
