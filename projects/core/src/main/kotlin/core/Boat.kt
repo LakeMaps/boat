@@ -1,5 +1,6 @@
 package core
 
+import core.broadcast.Broadcast
 import core.hardware.Propeller
 import core.values.GpsValue
 import core.values.Motion
@@ -11,7 +12,6 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 import rx.Observable
 import rx.Scheduler
-import rx.broadcast.Broadcast
 import rx.subjects.PublishSubject
 import rx.subjects.Subject
 
@@ -23,14 +23,14 @@ class Boat(private val broadcast: Broadcast, private val props: Pair<Propeller, 
     private val killSwitch: Subject<Void, Void> = PublishSubject.create()
 
     fun start(io: Scheduler, clock: Scheduler) {
-        val speeds = broadcast.valuesOfType(Motion::class.java)
+        val speeds = broadcast.valuesOfType<Motion>()
             .startWith(Motion(0.0, 0.0))
             .map { speed(it) }
             .onBackpressureLatest()
         val ticks = Observable.interval(SLEEP_DURATION_MS, TimeUnit.MILLISECONDS, clock)
         val positions = Observable.combineLatest(
-            broadcast.valuesOfType(GpsFix::class.java),
-            broadcast.valuesOfType(GpsNavInfo::class.java),
+            broadcast.valuesOfType<GpsFix>(),
+            broadcast.valuesOfType<GpsNavInfo>(),
             { fix, nav -> Pair(fix, nav)}
         )
 
