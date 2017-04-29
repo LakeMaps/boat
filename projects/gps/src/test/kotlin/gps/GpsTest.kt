@@ -1,8 +1,14 @@
 package gps
 
 import gps.parser.Sentence
+import units.Milliknot
+import units.Nanodegree
+import units.Quantity
+
 import org.junit.Assert
 import org.junit.Test
+import units.Millimetre
+
 import java.time.OffsetDateTime
 import java.time.OffsetTime
 import java.time.ZoneOffset
@@ -13,15 +19,15 @@ class GpsTest {
         val gps = Gps({ '?' }, { })
         val vtg = gps.vtg(Sentence("GP", "VTG", arrayOf("165.48", "T", "", "M", "0.03", "N", "0.06", "K", "A")))
 
-        Assert.assertEquals(GpsGroundVelocity(165.48, 0.03, 'A'), vtg)
+        Assert.assertEquals(GpsGroundVelocity(Quantity(165480000000, Nanodegree), Quantity(30, Milliknot), 'A'), vtg)
         Assert.assertTrue("Mode should be Autonomous", vtg.mode == GpsGroundVelocity.MODE_AUTONOMOUS)
     }
 
     @Test
     fun testRmcSentence() {
         val time = OffsetDateTime.of(2006, 4, 26, 6, 49, 51, 0, ZoneOffset.UTC)
-        val position = GpsPosition(latitude = 2307.1256, longitude = 12016.4438)
-        val expectedGpsNavInfo = GpsNavInfo(time, true, position, 0.03, 165.48, 'A')
+        val position = GpsPosition(latitude = Quantity(23118760000, Nanodegree), longitude = Quantity(120274063333, Nanodegree))
+        val expectedGpsNavInfo = GpsNavInfo(time, true, position, Quantity(30, Milliknot), Quantity(165480000000, Nanodegree), 'A')
 
         val gps = Gps({ '?' }, { })
         val rmc = gps.rmc(Sentence("GP", "RMC", arrayOf("064951.000", "A", "2307.1256", "N", "12016.4438", "E", "0.03", "165.48", "260406", "3.05", "W", "A")))
@@ -33,10 +39,10 @@ class GpsTest {
 
     @Test
     fun testGsvSentence1() {
-        val channel1 = GpsSatelliteMessage(29, 36,  29, 42)
-        val channel2 = GpsSatelliteMessage(21, 46, 314, 43)
-        val channel3 = GpsSatelliteMessage(26, 44,  20, 43)
-        val channel4 = GpsSatelliteMessage(15, 21, 321, 39)
+        val channel1 = GpsSatelliteMessage(29, Quantity(36e9, Nanodegree), Quantity( 29e9, Nanodegree), 42)
+        val channel2 = GpsSatelliteMessage(21, Quantity(46e9, Nanodegree), Quantity(314e9, Nanodegree), 43)
+        val channel3 = GpsSatelliteMessage(26, Quantity(44e9, Nanodegree), Quantity( 20e9, Nanodegree), 43)
+        val channel4 = GpsSatelliteMessage(15, Quantity(21e9, Nanodegree), Quantity(321e9, Nanodegree), 39)
         val expectedGsv = GpsSatellitesInView(3, 1, 9, channel1, channel2, channel3, channel4)
 
         val gps = Gps({ '?' }, { })
@@ -47,10 +53,10 @@ class GpsTest {
 
     @Test
     fun testGsvSentence2() {
-        val channel1 = GpsSatelliteMessage(18, 26, 314, 40)
-        val channel2 = GpsSatelliteMessage( 9, 57, 170, 44)
-        val channel3 = GpsSatelliteMessage( 6, 20, 229, 37)
-        val channel4 = GpsSatelliteMessage(10, 26,  84, 37)
+        val channel1 = GpsSatelliteMessage(18, Quantity(26e9, Nanodegree), Quantity(314e9, Nanodegree), 40)
+        val channel2 = GpsSatelliteMessage( 9, Quantity(57e9, Nanodegree), Quantity(170e9, Nanodegree), 44)
+        val channel3 = GpsSatelliteMessage( 6, Quantity(20e9, Nanodegree), Quantity(229e9, Nanodegree), 37)
+        val channel4 = GpsSatelliteMessage(10, Quantity(26e9, Nanodegree), Quantity( 84e9, Nanodegree), 37)
         val expectedGsv = GpsSatellitesInView(3, 2, 9, channel1, channel2, channel3, channel4)
 
         val gps = Gps({ '?' }, { })
@@ -85,8 +91,8 @@ class GpsTest {
     @Test
     fun testGgaSentence() {
         val time = OffsetTime.of(6, 49, 51, 0, ZoneOffset.UTC)
-        val position = GpsPosition(latitude = 2307.1256, longitude = 12016.4438)
-        val expected = GpsFix(time, position, '1', 8, GpsDilutionOfPrecision(horizontal = 0.95), 39.9, 17.8)
+        val position = GpsPosition(latitude = Quantity(23118760000, Nanodegree), longitude = Quantity(120274063333, Nanodegree))
+        val expected = GpsFix(time, position, '1', 8, GpsDilutionOfPrecision(horizontal = 0.95), Quantity(39900, Millimetre), Quantity(17800, Millimetre))
 
         val gps = Gps({ '?' }, { })
         val gsa = gps.gga(Sentence("GP", "GGA", arrayOf("064951.000", "2307.1256", "N", "12016.4438", "E", "1", "8", "0.95", "39.9", "M", "17.8", "M", "", "")))
@@ -140,7 +146,7 @@ class GpsTest {
 
     @Test
     fun testGgaSentenceWithoutLock() {
-        val expected = GpsFix(OffsetTime.of(6, 49, 51, 0, ZoneOffset.UTC), null, '0', 0, null, null, 0.0)
+        val expected = GpsFix(OffsetTime.of(6, 49, 51, 0, ZoneOffset.UTC), null, '0', 0, null, null, Quantity(0, Millimetre))
 
         val gps = Gps({ '?' }, { })
         val gsa = gps.gga(Sentence("GP", "GGA", arrayOf("064951.000", "", "", "", "", "0", "00", "", "", "M", "0.0", "M", "", "0000")))
@@ -150,10 +156,10 @@ class GpsTest {
 
     @Test
     fun testGsvSentenceMissingSomeSignalNoiseRatio() {
-        val channel1 = GpsSatelliteMessage(8, 78, 253, null)
-        val channel2 = GpsSatelliteMessage(27, 60, 55, 21)
-        val channel3 = GpsSatelliteMessage(7, 56, 280, null)
-        val channel4 = GpsSatelliteMessage(16, 34, 98, 23)
+        val channel1 = GpsSatelliteMessage( 8, Quantity(78e9, Nanodegree), Quantity(253e9, Nanodegree), null)
+        val channel2 = GpsSatelliteMessage(27, Quantity(60e9, Nanodegree), Quantity( 55e9, Nanodegree), 21)
+        val channel3 = GpsSatelliteMessage( 7, Quantity(56e9, Nanodegree), Quantity(280e9, Nanodegree), null)
+        val channel4 = GpsSatelliteMessage(16, Quantity(34e9, Nanodegree), Quantity( 98e9, Nanodegree), 23)
         val expectedGsv = GpsSatellitesInView(3, 1, 12, channel1, channel2, channel3, channel4)
 
         val gps = Gps({ '?' }, { })

@@ -2,6 +2,13 @@ package gps
 
 import gps.parser.Sentence
 import gps.parser.SentenceParser
+import units.Angle
+import units.Length
+import units.Milliknot
+import units.Millimetre
+import units.Nanodegree
+import units.Quantity
+import units.Speed
 
 import java.time.LocalDate
 import java.time.LocalTime
@@ -43,11 +50,11 @@ class Gps(recv: () -> Char, private val callback: (Any) -> Unit) {
 
     internal fun gga(sentence: Sentence): GpsFix {
         val time = OffsetTime.of(sentence.time(0), ZoneOffset.UTC)
-        val lat = sentence.doubleOrNull(1)
-        val position = lat?.let { GpsPosition(latitude = it, longitude = sentence.double(3)) }
+        val lat = sentence.decimalDegreesOrNull(1, 2)
+        val position = lat?.let { GpsPosition(latitude = it, longitude = sentence.decimalDegreesOrNull(3, 4)!!) }
         val dOP = sentence.doubleOrNull(7)?.let { GpsDilutionOfPrecision(horizontal = it) }
-        val altitude = sentence.doubleOrNull(8)
-        return GpsFix(time, position, sentence.char(5), sentence.int(6), dOP, altitude, sentence.doubleOrNull(10))
+        val altitude = sentence.millimetreOrNull(8)
+        return GpsFix(time, position, sentence.char(5), sentence.int(6), dOP, altitude, sentence.millimetreOrNull(10))
     }
 
     internal fun gsa(sentence: Sentence): GpsActiveSatellites {
@@ -58,16 +65,16 @@ class Gps(recv: () -> Char, private val callback: (Any) -> Unit) {
 
     internal fun gsv(sentence: Sentence): GpsSatellitesInView {
         val channel1Id = sentence.intOrNull( 3)
-        val channel1 = channel1Id?.let { GpsSatelliteMessage(it, sentence.intOrNull( 4), sentence.intOrNull( 5), sentence.intOrNull( 6)) }
+        val channel1 = channel1Id?.let { GpsSatelliteMessage(it, sentence.nanodegreeOrNull( 4), sentence.nanodegreeOrNull( 5), sentence.intOrNull( 6)) }
 
         val channel2Id = sentence.intOrNull( 7)
-        val channel2 = channel2Id?.let { GpsSatelliteMessage(it, sentence.intOrNull( 8), sentence.intOrNull( 9), sentence.intOrNull(10)) }
+        val channel2 = channel2Id?.let { GpsSatelliteMessage(it, sentence.nanodegreeOrNull( 8), sentence.nanodegreeOrNull( 9), sentence.intOrNull(10)) }
 
         val channel3Id = sentence.intOrNull(11)
-        val channel3 = channel3Id?.let { GpsSatelliteMessage(it, sentence.intOrNull(12), sentence.intOrNull(13), sentence.intOrNull(14)) }
+        val channel3 = channel3Id?.let { GpsSatelliteMessage(it, sentence.nanodegreeOrNull(12), sentence.nanodegreeOrNull(13), sentence.intOrNull(14)) }
 
         val channel4Id = sentence.intOrNull(15)
-        val channel4 = channel4Id?.let { GpsSatelliteMessage(it, sentence.intOrNull(16), sentence.intOrNull(17), sentence.intOrNull(18)) }
+        val channel4 = channel4Id?.let { GpsSatelliteMessage(it, sentence.nanodegreeOrNull(16), sentence.nanodegreeOrNull(17), sentence.intOrNull(18)) }
 
         return GpsSatellitesInView(sentence.int(0), sentence.int(1), sentence.int(2), channel1, channel2, channel3, channel4)
     }
@@ -77,14 +84,14 @@ class Gps(recv: () -> Char, private val callback: (Any) -> Unit) {
         val time = sentence.time(0)
         val datetime = OffsetDateTime.of(date, time, ZoneOffset.UTC)
         val status = sentence.char(1) == GpsNavInfo.STATUS_VALID
-        val latitude = sentence.doubleOrNull(4)
-        val longitude = sentence.doubleOrNull(2)
+        val latitude = sentence.decimalDegreesOrNull(4, 5)
+        val longitude = sentence.decimalDegreesOrNull(2, 3)
         val position = if (latitude != null && longitude != null) GpsPosition(latitude, longitude) else null
-        return GpsNavInfo(datetime, status, position, sentence.doubleOrNull(6), sentence.doubleOrNull(7), sentence.char(11))
+        return GpsNavInfo(datetime, status, position, sentence.milliknotOrNull(6), sentence.nanodegreeOrNull(7), sentence.char(11))
     }
 
     internal fun vtg(sentence: Sentence): GpsGroundVelocity {
-        return GpsGroundVelocity(sentence.double(0), sentence.double(4), sentence.char(8))
+        return GpsGroundVelocity(sentence.nanodegree(0), sentence.milliknot(4), sentence.char(8))
     }
 
     private fun Sentence.time(index: Int): LocalTime {
@@ -113,5 +120,86 @@ class Gps(recv: () -> Char, private val callback: (Any) -> Unit) {
 
     private fun Sentence.double(index: Int): Double {
         return String(this.fields[index]).toDouble()
+    }
+
+    private fun Sentence.milliknotOrNull(index: Int): Quantity<Speed, Milliknot>? {
+        val field = String(this.fields[index]);
+
+        if (field == "") {
+            return null
+        }
+
+        val (firstBit, secondBit) = field.split('.', limit = 2)
+        val num = (firstBit + secondBit.padEnd(3, '0')).toLong()
+        return Quantity(num, Milliknot)
+    }
+
+    private fun Sentence.milliknot(index: Int): Quantity<Speed, Milliknot> {
+        val s = String(this.fields[index])
+        val (firstBit, secondBit) = s.split('.', limit = 2)
+        val num = (firstBit + secondBit.padEnd(3, '0')).toLong()
+        return Quantity(num, Milliknot)
+    }
+
+    private fun Sentence.millimetreOrNull(index: Int): Quantity<Length, Millimetre>? {
+        val s = String(this.fields[index])
+        if (s == "") {
+            return null
+        }
+
+        return Quantity((s.toDouble() * 10e2).toLong(), Millimetre)
+    }
+
+    private fun Sentence.nanodegreeOrNull(index: Int): Quantity<Angle, Nanodegree>? {
+        return this.fields.getOrNull(index)?.let {
+            val s = String(it)
+            val parts = s.split('.', limit = 2)
+            val a = parts.getOrNull(0)
+            val b = parts.getOrNull(1)
+            when {
+                a == null || a == "" -> null
+                b != null -> Quantity((a + b.padEnd(9, '0')).toLong(), Nanodegree)
+                else -> Quantity((a + "0".repeat(9)).toLong(), Nanodegree)
+            }
+        }
+    }
+
+    private fun Sentence.nanodegree(index: Int): Quantity<Angle, Nanodegree> {
+        val s = String(this.fields[index])
+        val (firstBit, secondBit) = s.split('.', limit = 2)
+        val num = (firstBit + secondBit.padEnd(9, '0')).toLong()
+        return Quantity(num, Nanodegree)
+    }
+
+    /**
+     * Returns the sentence field at the given index in decimal degrees.
+     *
+     * Converts the field value from `ddmm.mmmm` (or `dddmm.mmmm` in the case of longitude) to decimal degrees.
+     *
+     * @param index the field index
+     * @return the value in decimal degrees
+     * @see <a href="https://en.wikipedia.org/wiki/Decimal_degrees">Wikipedia: Decimal Degrees</a>
+     */
+    private fun Sentence.decimalDegreesOrNull(index: Int, signIndex: Int): Quantity<Angle, Nanodegree>? {
+        return this.fields.getOrNull(index)?.let {
+            val s = String(it)
+
+            if (s == "") {
+                return null
+            }
+
+            val indexOfDecimal = s.indexOf('.')
+            val degrees = (s.slice(0..(indexOfDecimal - 3)) + "0".repeat(9)).toLong()
+            val decimalMinutes = s.slice((indexOfDecimal - 2)..s.lastIndex).toDouble()
+            val decimalDegrees = (decimalMinutes / 0.6 * 10e6).toLong()
+
+            val direction = this.fields.getOrNull(signIndex)
+            val sign = when (direction?.let { String(it) }) {
+                "S", "W" -> -1L
+                else -> 1L
+            }
+
+            Quantity(sign * (degrees + decimalDegrees), Nanodegree)
+        }
     }
 }
