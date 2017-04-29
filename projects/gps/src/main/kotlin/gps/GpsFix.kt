@@ -1,5 +1,8 @@
 package gps
 
+import units.Length
+import units.Millimetre
+import units.Quantity
 import java.time.OffsetTime
 
 /**
@@ -10,7 +13,7 @@ import java.time.OffsetTime
  * @property positionFixIndicator whether the device does ([GPS_FIX] or [DIFFERENTIAL_GPS_FIX]) or does not have a fix ([FIX_NOT_AVAILABLE])
  * @property satellitesUsed the number of satellites used in this position (from 0 to 14)
  * @property dilutionOfPrecision the dilution of precision
- * @property altitude antenna altitude above or below mean-sea-level in meters
+ * @property altitude antenna altitude above or below mean-sea-level
  * @property geoidalSeparation geoidal separation
  */
 data class GpsFix(
@@ -19,8 +22,8 @@ data class GpsFix(
     val positionFixIndicator: Char,
     val satellitesUsed: Int,
     val dilutionOfPrecision: GpsDilutionOfPrecision?,
-    val altitude: Double?,
-    val geoidalSeparation: Double?
+    val altitude: Quantity<Length, Millimetre>?,
+    val geoidalSeparation: Quantity<Length, Millimetre>?
 ) {
     companion object {
         const val FIX_NOT_AVAILABLE = '0'

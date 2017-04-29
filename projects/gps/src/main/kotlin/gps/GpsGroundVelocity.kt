@@ -1,13 +1,19 @@
 package gps
 
+import units.Angle
+import units.Milliknot
+import units.Nanodegree
+import units.Quantity
+import units.Speed
+
 /**
  * An NMEA 0183 `VTG` sentence.
  *
  * @property course the measured heading
- * @property speed the measured speed in knots
+ * @property speed the measured speed
  * @property mode the device mode when this velocity was measured (i.e. [MODE_AUTONOMOUS], [MODE_DIFFERENTIAL], or [MODE_ESTIMATED])
  */
-data class GpsGroundVelocity(val course: Double, val speed: Double, val mode: Char) {
+data class GpsGroundVelocity(val course: Quantity<Angle, Nanodegree>, val speed: Quantity<Speed, Milliknot>, val mode: Char) {
     companion object {
         const val MODE_AUTONOMOUS = 'A'
         const val MODE_DIFFERENTIAL = 'D'
