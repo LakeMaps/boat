@@ -1,23 +1,18 @@
 import org.gradle.api.tasks.testing.Test
 import org.gradle.api.tasks.testing.logging.TestLogging
 
-buildscript {
-    repositories {
-        gradleScriptKotlin()
-    }
-    dependencies {
-        classpath(kotlinModule("gradle-plugin"))
-    }
+repositories {
+    jcenter()
 }
 
-apply {
-    plugin("kotlin")
+plugins {
+    id("org.jetbrains.kotlin.jvm") version "1.1.2"
 }
 
 dependencies {
-    compile(kotlinModule("stdlib"))
+    compile("org.jetbrains.kotlin:kotlin-stdlib-jre8")
     testCompile("junit:junit:4.12")
-    testCompile("org.jetbrains.kotlin:kotlin-test-junit:1.0.6")
+    testCompile("org.jetbrains.kotlin:kotlin-test-junit")
 }
 
 tasks.withType<Test> {
