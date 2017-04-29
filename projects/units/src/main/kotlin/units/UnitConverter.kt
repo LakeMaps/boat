@@ -1,6 +1,6 @@
 package units
 
-internal object UnitConverter {
+object UnitConverter {
     fun <T: Unit<T>> convert(value: Long, fromUnit: Unit<T>, toUnit: Unit<T>) = when (fromUnit) {
         is Angle     -> convertUnits(value, fromUnit, toUnit as Angle    )
         is Frequency -> convertUnits(value, fromUnit, toUnit as Frequency)
@@ -31,4 +31,7 @@ internal object UnitConverter {
             Milliknot -> value
         }
     }
+
+    fun fromMilli(value: Long) = value * 10e-3
+    fun fromNano(value: Long) = value * 10e-9
 }
