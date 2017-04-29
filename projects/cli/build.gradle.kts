@@ -1,22 +1,14 @@
-buildscript {
-    repositories {
-        gradleScriptKotlin()
-    }
-    dependencies {
-        classpath(kotlinModule("gradle-plugin"))
-    }
+repositories {
+    jcenter()
 }
 
 plugins {
     application
-}
-
-apply {
-    plugin("kotlin")
+    id("org.jetbrains.kotlin.jvm") version "1.1.2"
 }
 
 dependencies {
-    compile(kotlinModule("stdlib"))
+    compile("org.jetbrains.kotlin:kotlin-stdlib-jre8")
     compile(project(":core"))
     compile(project(":gps"))
     compile(project(":log"))
