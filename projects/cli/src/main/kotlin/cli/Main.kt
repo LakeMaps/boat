@@ -4,6 +4,7 @@ package cli
 
 import com.google.protobuf.InvalidProtocolBufferException
 import core.Boat
+import core.broadcast.Broadcast
 import core.hardware.ScrewPropeller
 import core.values.GpsValue
 import core.values.Motion
@@ -34,7 +35,7 @@ fun main(args: Array<String>) {
         return
     }
 
-    val broadcast = InMemoryBroadcast()
+    val broadcast = Broadcast(InMemoryBroadcast())
 
     val wSerialPort = SerialPort(args[0], baudRate = 57600)
     val pSerialPort = SerialPort(args[1], baudRate = 57600)
@@ -60,7 +61,7 @@ fun main(args: Array<String>) {
             }
         }
 
-    broadcast.valuesOfType(GpsValue::class.java)
+    broadcast.valuesOfType<GpsValue>()
         .observeOn(Schedulers.io())
         .subscribe {
             Log.d {"Sending ${it.encode().size} bytes across the wire"}

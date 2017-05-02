@@ -1,5 +1,6 @@
 package core
 
+import core.broadcast.Broadcast
 import core.hardware.Propeller
 import core.values.Motion
 
@@ -23,7 +24,7 @@ class BoatTest {
         val broadcast = InMemoryBroadcast()
         val scheduler = TestScheduler()
         val props = Pair(NullPropeller(), NullPropeller())
-        val boat = Boat(broadcast, props)
+        val boat = Boat(Broadcast(broadcast), props)
 
         boat.start(io = scheduler, clock = scheduler)
 
@@ -47,7 +48,7 @@ class BoatTest {
         val broadcast = InMemoryBroadcast()
         val scheduler = TestScheduler()
         val props = Pair(NullPropeller(), NullPropeller())
-        val boat = Boat(broadcast, props)
+        val boat = Boat(Broadcast(broadcast), props)
 
         boat.start(io = scheduler, clock = scheduler)
 
@@ -71,7 +72,7 @@ class BoatTest {
         val broadcast = InMemoryBroadcast()
         val scheduler = TestScheduler()
         val props = Pair(NullPropeller(), NullPropeller())
-        val boat = Boat(broadcast, props)
+        val boat = Boat(Broadcast(broadcast), props)
 
         boat.start(io = scheduler, clock = scheduler)
 

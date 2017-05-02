@@ -1,6 +1,7 @@
 package jmh
 
 import core.Boat
+import core.broadcast.Broadcast
 import core.hardware.Propeller
 import core.hardware.ScrewPropeller
 import core.values.Motion
@@ -39,7 +40,7 @@ open class BoatBenchmark {
 
     @Benchmark
     fun tick(): Pair<NullPropeller, NullPropeller> {
-        val broadcast = InMemoryBroadcast()
+        val broadcast = Broadcast(InMemoryBroadcast())
         val scheduler = TestScheduler()
         val props = Pair(NullPropeller(), NullPropeller())
         val boat = Boat(broadcast, props)
@@ -105,7 +106,7 @@ open class BoatBenchmark {
 
         val boatClockScheduler = TestScheduler()
         val wirelessClockScheduler = TestScheduler()
-        val broadcast = InMemoryBroadcast()
+        val broadcast = Broadcast(InMemoryBroadcast())
         val boat = Boat(broadcast, props)
 
         boat.start(io = Schedulers.io(), clock = boatClockScheduler)
