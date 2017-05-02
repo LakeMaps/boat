@@ -1,5 +1,6 @@
 import org.gradle.api.tasks.testing.Test
 import org.gradle.api.tasks.testing.logging.TestLogging
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 repositories {
     jcenter()
@@ -21,4 +22,10 @@ tasks.withType<Test> {
         showStandardStreams = true
         events("passed", "skipped", "failed")
     })
+}
+
+tasks.withType<KotlinCompile> {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 }
