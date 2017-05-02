@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 repositories {
     jcenter()
 }
@@ -8,4 +10,10 @@ plugins {
 
 dependencies {
     compile("org.jetbrains.kotlin:kotlin-stdlib-jre8")
+}
+
+tasks.withType<KotlinCompile> {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 }

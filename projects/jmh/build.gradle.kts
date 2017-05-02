@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 repositories {
     jcenter()
 }
@@ -18,4 +20,10 @@ dependencies {
 
 configure<ApplicationPluginConvention> {
     mainClassName = "org.openjdk.jmh.Main"
+}
+
+tasks.withType<KotlinCompile> {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 }
