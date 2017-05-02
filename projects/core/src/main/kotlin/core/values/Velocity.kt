@@ -1,3 +1,9 @@
 package core.values
 
-data class Velocity(val speed: Float, val trueBearing: Float)
+import units.Angle
+import units.Knot
+import units.Degree
+import units.Quantity
+import units.Speed
+
+data class Velocity(val speed: Quantity<Speed, Knot>, val trueBearing: Quantity<Angle, Degree>)
