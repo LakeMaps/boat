@@ -1,5 +1,6 @@
 package units
 
+@kotlin.Suppress("unused")
 sealed class Unit<U: Unit<U>>(val symbol: String) {
     override fun toString() = symbol
 }
