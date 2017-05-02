@@ -2,12 +2,12 @@ package gps
 
 import gps.parser.Sentence
 import units.Degree
-import units.Knot
 import units.Metre
 import units.Quantity
 
 import org.junit.Assert
 import org.junit.Test
+import units.MetrePerSecond
 
 import java.time.OffsetDateTime
 import java.time.OffsetTime
@@ -19,7 +19,7 @@ class GpsTest {
         val gps = Gps({ '?' }, { })
         val vtg = gps.vtg(Sentence("GP", "VTG", arrayOf("165.48", "T", "", "M", "0.03", "N", "0.06", "K", "A")))
 
-        Assert.assertEquals(GpsGroundVelocity(Quantity(165.48, Degree), Quantity(0.03, Knot), 'A'), vtg)
+        Assert.assertEquals(GpsGroundVelocity(Quantity(165.48, Degree), Quantity(0.01543333332, MetrePerSecond), 'A'), vtg)
         Assert.assertTrue("Mode should be Autonomous", vtg.mode == GpsGroundVelocity.MODE_AUTONOMOUS)
     }
 
@@ -27,7 +27,7 @@ class GpsTest {
     fun testRmcSentence() {
         val time = OffsetDateTime.of(2006, 4, 26, 6, 49, 51, 0, ZoneOffset.UTC)
         val position = GpsPosition(latitude = Quantity(23.11876, Degree), longitude = Quantity(120.27406333333333, Degree))
-        val expectedGpsNavInfo = GpsNavInfo(time, true, position, Quantity(0.03, Knot), Quantity(165.48, Degree), 'A')
+        val expectedGpsNavInfo = GpsNavInfo(time, true, position, Quantity(0.01543333332, MetrePerSecond), Quantity(165.48, Degree), 'A')
 
         val gps = Gps({ '?' }, { })
         val rmc = gps.rmc(Sentence("GP", "RMC", arrayOf("064951.000", "A", "2307.1256", "N", "12016.4438", "E", "0.03", "165.48", "260406", "3.05", "W", "A")))

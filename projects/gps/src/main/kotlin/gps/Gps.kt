@@ -4,7 +4,9 @@ import gps.parser.Sentence
 import gps.parser.SentenceParser
 import units.Degree
 import units.Knot
+import units.Knot.convert
 import units.Metre
+import units.MetrePerSecond
 import units.Quantity
 
 import java.time.LocalDate
@@ -93,13 +95,14 @@ class Gps(recv: () -> Char, private val callback: (Any) -> Unit) {
         val latitude = sentence.decimalDegreesOrNull(4, 5)
         val longitude = sentence.decimalDegreesOrNull(2, 3)
         val position = if (latitude != null && longitude != null) GpsPosition(latitude, longitude) else null
-        val speed = sentence.doubleOrNull(6)?.let { Quantity(it, Knot) }
+        val speed = sentence.doubleOrNull(6)?.let { Quantity(it, Knot).convert<MetrePerSecond>(MetrePerSecond) }
         val course = sentence.doubleOrNull(7)?.let { Quantity(it, Degree) }
+
         return GpsNavInfo(datetime, status, position, speed, course, sentence.char(11))
     }
 
     internal fun vtg(sentence: Sentence): GpsGroundVelocity {
-        return GpsGroundVelocity(Quantity(sentence.double(0), Degree), Quantity(sentence.double(4), Knot), sentence.char(8))
+        return GpsGroundVelocity(Quantity(sentence.double(0), Degree), Quantity(sentence.double(4), Knot).convert(MetrePerSecond), sentence.char(8))
     }
 
     private fun Sentence.time(index: Int): LocalTime {

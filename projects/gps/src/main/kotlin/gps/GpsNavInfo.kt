@@ -1,8 +1,8 @@
 package gps
 
 import units.Angle
-import units.Knot
 import units.Degree
+import units.MetrePerSecond
 import units.Quantity
 import units.Speed
 
@@ -22,7 +22,7 @@ data class GpsNavInfo(
     val instant: OffsetDateTime,
     val valid: Boolean,
     val position: GpsPosition?,
-    val speed: Quantity<Speed, Knot>?,
+    val speed: Quantity<Speed, MetrePerSecond>?,
     val course: Quantity<Angle, Degree>?,
     val mode: Char
 ) {
