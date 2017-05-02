@@ -13,6 +13,7 @@ plugins {
 
 dependencies {
     compile("org.jetbrains.kotlin:kotlin-stdlib-jre8")
+    compile(project(":units"))
     compile(project(":gps"))
     compile(project(":microcontrollers"))
     compile("com.google.protobuf:protobuf-java:3.2.0")

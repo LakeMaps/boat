@@ -10,8 +10,8 @@ plugins {
 }
 
 dependencies {
-    compile(project(":units"))
     compile("org.jetbrains.kotlin:kotlin-stdlib-jre8")
+    compile(project(":log"))
     testCompile("junit:junit:4.12")
     testCompile("org.jetbrains.kotlin:kotlin-test-junit")
 }
