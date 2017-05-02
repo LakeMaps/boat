@@ -2,6 +2,7 @@ package gps
 
 import gps.parser.Sentence
 import gps.parser.SentenceParser
+import units.Decibel
 import units.Degree
 import units.Knot
 import units.Knot.convert
@@ -67,22 +68,26 @@ class Gps(recv: () -> Char, private val callback: (Any) -> Unit) {
         val channel1Id = sentence.intOrNull(3)
         val channel1Elevation = sentence.doubleOrNull(4)?.let { Quantity(it, Degree) }
         val channel1Azimuth = sentence.doubleOrNull(5)?.let { Quantity(it, Degree) }
-        val channel1 = channel1Id?.let { GpsSatelliteMessage(it, channel1Elevation, channel1Azimuth, sentence.intOrNull( 6)) }
+        val channel1SignalNoiseRatio = sentence.intOrNull(6)?.let { Quantity(it, Decibel) }
+        val channel1 = channel1Id?.let { GpsSatelliteMessage(it, channel1Elevation, channel1Azimuth, channel1SignalNoiseRatio) }
 
         val channel2Id = sentence.intOrNull(7)
         val channel2Elevation = sentence.doubleOrNull(8)?.let { Quantity(it, Degree) }
         val channel2Azimuth = sentence.doubleOrNull(9)?.let { Quantity(it, Degree) }
-        val channel2 = channel2Id?.let { GpsSatelliteMessage(it, channel2Elevation, channel2Azimuth, sentence.intOrNull(10)) }
+        val channel2SignalNoiseRatio = sentence.intOrNull(10)?.let { Quantity(it, Decibel) }
+        val channel2 = channel2Id?.let { GpsSatelliteMessage(it, channel2Elevation, channel2Azimuth, channel2SignalNoiseRatio) }
 
         val channel3Id = sentence.intOrNull(11)
         val channel3Elevation = sentence.doubleOrNull(12)?.let { Quantity(it, Degree) }
         val channel3Azimuth = sentence.doubleOrNull(13)?.let { Quantity(it, Degree) }
-        val channel3 = channel3Id?.let { GpsSatelliteMessage(it, channel3Elevation, channel3Azimuth, sentence.intOrNull(14)) }
+        val channel3SignalNoiseRatio = sentence.intOrNull(14)?.let { Quantity(it, Decibel) }
+        val channel3 = channel3Id?.let { GpsSatelliteMessage(it, channel3Elevation, channel3Azimuth, channel3SignalNoiseRatio) }
 
         val channel4Id = sentence.intOrNull(15)
         val channel4Elevation = sentence.doubleOrNull(16)?.let { Quantity(it, Degree) }
         val channel4Azimuth = sentence.doubleOrNull(17)?.let { Quantity(it, Degree) }
-        val channel4 = channel4Id?.let { GpsSatelliteMessage(it, channel4Elevation, channel4Azimuth, sentence.intOrNull(18)) }
+        val channel4SignalNoiseRatio = sentence.intOrNull(18)?.let { Quantity(it, Decibel) }
+        val channel4 = channel4Id?.let { GpsSatelliteMessage(it, channel4Elevation, channel4Azimuth, channel4SignalNoiseRatio) }
 
         return GpsSatellitesInView(sentence.int(0), sentence.int(1), sentence.int(2), channel1, channel2, channel3, channel4)
     }

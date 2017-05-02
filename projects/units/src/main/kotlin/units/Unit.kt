@@ -19,3 +19,6 @@ object Knot: Speed("kn") {
         MetrePerSecond -> Quantity(value * 0.514444444, to as T)
     }
 }
+
+sealed class SignalNoiseRatio(symbol: String): Unit<SignalNoiseRatio>(symbol)
+object Decibel: SignalNoiseRatio("dB")

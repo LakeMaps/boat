@@ -7,6 +7,7 @@ import units.Quantity
 
 import org.junit.Assert
 import org.junit.Test
+import units.Decibel
 import units.MetrePerSecond
 
 import java.time.OffsetDateTime
@@ -39,10 +40,10 @@ class GpsTest {
 
     @Test
     fun testGsvSentence1() {
-        val channel1 = GpsSatelliteMessage(29, Quantity(36, Degree), Quantity( 29, Degree), 42)
-        val channel2 = GpsSatelliteMessage(21, Quantity(46, Degree), Quantity(314, Degree), 43)
-        val channel3 = GpsSatelliteMessage(26, Quantity(44, Degree), Quantity( 20, Degree), 43)
-        val channel4 = GpsSatelliteMessage(15, Quantity(21, Degree), Quantity(321, Degree), 39)
+        val channel1 = GpsSatelliteMessage(29, Quantity(36, Degree), Quantity( 29, Degree), Quantity(42, Decibel))
+        val channel2 = GpsSatelliteMessage(21, Quantity(46, Degree), Quantity(314, Degree), Quantity(43, Decibel))
+        val channel3 = GpsSatelliteMessage(26, Quantity(44, Degree), Quantity( 20, Degree), Quantity(43, Decibel))
+        val channel4 = GpsSatelliteMessage(15, Quantity(21, Degree), Quantity(321, Degree), Quantity(39, Decibel))
         val expectedGsv = GpsSatellitesInView(3, 1, 9, channel1, channel2, channel3, channel4)
 
         val gps = Gps({ '?' }, { })
@@ -53,10 +54,10 @@ class GpsTest {
 
     @Test
     fun testGsvSentence2() {
-        val channel1 = GpsSatelliteMessage(18, Quantity(26, Degree), Quantity(314, Degree), 40)
-        val channel2 = GpsSatelliteMessage( 9, Quantity(57, Degree), Quantity(170, Degree), 44)
-        val channel3 = GpsSatelliteMessage( 6, Quantity(20, Degree), Quantity(229, Degree), 37)
-        val channel4 = GpsSatelliteMessage(10, Quantity(26, Degree), Quantity( 84, Degree), 37)
+        val channel1 = GpsSatelliteMessage(18, Quantity(26, Degree), Quantity(314, Degree), Quantity(40, Decibel))
+        val channel2 = GpsSatelliteMessage( 9, Quantity(57, Degree), Quantity(170, Degree), Quantity(44, Decibel))
+        val channel3 = GpsSatelliteMessage( 6, Quantity(20, Degree), Quantity(229, Degree), Quantity(37, Decibel))
+        val channel4 = GpsSatelliteMessage(10, Quantity(26, Degree), Quantity( 84, Degree), Quantity(37, Decibel))
         val expectedGsv = GpsSatellitesInView(3, 2, 9, channel1, channel2, channel3, channel4)
 
         val gps = Gps({ '?' }, { })
@@ -67,7 +68,7 @@ class GpsTest {
 
     @Test
     fun testGsvSentence3() {
-        val channel1 = GpsSatelliteMessage(7, null,  null, 26)
+        val channel1 = GpsSatelliteMessage(7, null,  null, Quantity(26, Decibel))
         val expectedGsv = GpsSatellitesInView(3, 3, 9, channel1)
 
         val gps = Gps({ '?' }, { })
@@ -157,9 +158,9 @@ class GpsTest {
     @Test
     fun testGsvSentenceMissingSomeSignalNoiseRatio() {
         val channel1 = GpsSatelliteMessage( 8, Quantity(78, Degree), Quantity(253, Degree), null)
-        val channel2 = GpsSatelliteMessage(27, Quantity(60, Degree), Quantity( 55, Degree), 21)
+        val channel2 = GpsSatelliteMessage(27, Quantity(60, Degree), Quantity( 55, Degree), Quantity(21, Decibel))
         val channel3 = GpsSatelliteMessage( 7, Quantity(56, Degree), Quantity(280, Degree), null)
-        val channel4 = GpsSatelliteMessage(16, Quantity(34, Degree), Quantity( 98, Degree), 23)
+        val channel4 = GpsSatelliteMessage(16, Quantity(34, Degree), Quantity( 98, Degree), Quantity(23, Decibel))
         val expectedGsv = GpsSatellitesInView(3, 1, 12, channel1, channel2, channel3, channel4)
 
         val gps = Gps({ '?' }, { })

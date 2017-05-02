@@ -1,8 +1,10 @@
 package gps
 
 import units.Angle
+import units.Decibel
 import units.Degree
 import units.Quantity
+import units.SignalNoiseRatio
 
 /**
  * A satellite message.
@@ -12,4 +14,4 @@ import units.Quantity
  * @property azimuth the azimuth
  * @property signalRatio the signal-to-noise ratio in dBHz
  */
-data class GpsSatelliteMessage(val id: Int, val elevation: Quantity<Angle, Degree>?, val azimuth: Quantity<Angle, Degree>?, val signalRatio: Int?)
+data class GpsSatelliteMessage(val id: Int, val elevation: Quantity<Angle, Degree>?, val azimuth: Quantity<Angle, Degree>?, val signalRatio: Quantity<SignalNoiseRatio, Decibel>?)
