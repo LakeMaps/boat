@@ -1,7 +1,5 @@
 package core.control
 
-import core.collections.RingBuffer
-
 class PIDController<in T>(
     private val setpoint: T,
     private val dt: Long,
@@ -14,7 +12,7 @@ class PIDController<in T>(
         const val BUFFER_SIZE = 4
     }
 
-    private val errors = RingBuffer(BUFFER_SIZE)
+    private val errors = ErrorState(BUFFER_SIZE)
 
     init {
         // To simplify calculations, let's pre-fill the buffer. This allows
@@ -27,11 +25,9 @@ class PIDController<in T>(
 
     fun nextOutput(): Double {
         val (kp, ki, kd) = gains
-        val errorsArray = errors.array
-        val lastError = errorsArray.last()
-        val integral = errorsArray.map({ it * dt }).sum()
-        val deltaError = errorsArray[errorsArray.lastIndex - 1] - errorsArray[errorsArray.lastIndex]
-        val derivative = deltaError / dt
-        return (kp * lastError) + (ki * integral) + (kd * derivative)
+        val integral = errors.sum({ it * dt })
+        val de = errors.nth(-1) - errors.last()
+        val derivative = de / dt
+        return (kp * errors.last()) + (ki * integral) + (kd * derivative)
     }
 }
