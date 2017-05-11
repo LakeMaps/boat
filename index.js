@@ -1,7 +1,9 @@
 messages = [
+    'Bytes',
     'Gps',
     'Motion',
     'Position',
+    'TypedMessage',
     'Velocity',
 ];
 module.exports = Object.assign({}, null);
