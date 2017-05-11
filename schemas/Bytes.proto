@@ -1,0 +1,9 @@
+syntax = "proto2";
+
+option java_package = "schemas";
+option java_outer_classname = "BytesProtobuf";
+
+message Bytes {
+    required int32 byte_count = 1;
+    required bytes bytes = 2;
+}
