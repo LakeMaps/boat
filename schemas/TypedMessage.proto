@@ -1,0 +1,20 @@
+syntax = "proto2";
+
+option java_package = "schemas";
+option java_outer_classname = "TypedMessageProtobuf";
+
+import "schemas/Gps.proto";
+import "schemas/Motion.proto";
+
+message TypedMessage {
+    enum Type {
+        GPS = 1;
+        MOTION = 2;
+    }
+
+    required Type type = 1;
+    extensions 2 to 9;
+
+    optional Gps gps = 10;
+    optional Motion motion = 11;
+}
