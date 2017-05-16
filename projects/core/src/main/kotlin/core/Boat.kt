@@ -1,7 +1,6 @@
 package core
 
 import core.broadcast.Broadcast
-import core.hardware.Propeller
 import core.values.GpsValue
 import core.values.Motion
 import gps.GpsFix
@@ -15,7 +14,7 @@ import rx.Scheduler
 import rx.subjects.PublishSubject
 import rx.subjects.Subject
 
-class Boat(private val broadcast: Broadcast, private val props: Pair<Propeller, Propeller>) {
+class Boat(private val broadcast: Broadcast, private val propulsionSystem: PropulsionSystem) {
     val SLEEP_DURATION_MS = 30L
 
     private val dead = AtomicBoolean()
@@ -57,10 +56,8 @@ class Boat(private val broadcast: Broadcast, private val props: Pair<Propeller, 
     }
 
     private fun tick(outputs: Pair<Double, Double>) {
-        val (l, r) = props
         val (a, b) = outputs
-        l.speed = a
-        r.speed = b
+        propulsionSystem.setSpeed(a, b)
     }
 
     private fun speed(motion: Motion): Pair<Double, Double> {

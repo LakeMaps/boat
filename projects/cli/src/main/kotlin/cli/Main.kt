@@ -4,8 +4,8 @@ package cli
 
 import com.google.protobuf.InvalidProtocolBufferException
 import core.Boat
+import core.PropulsionSystem
 import core.broadcast.Broadcast
-import core.hardware.ScrewPropeller
 import core.values.GpsValue
 import core.values.Motion
 import gps.Gps
@@ -44,8 +44,7 @@ fun main(args: Array<String>) {
     val propulsionMicrocontroller = PropulsionMicrocontroller(ReentrantLock(), pSerialPort::recv, pSerialPort::send)
     val gpsMicrocontroller = Gps({ gSerialPort.recv().toChar() }, { msg -> broadcast.send(msg).subscribe() })
 
-    val props = Pair(ScrewPropeller(propulsionMicrocontroller, 0), ScrewPropeller(propulsionMicrocontroller, 1))
-    val boat = Boat(broadcast, props)
+    val boat = Boat(broadcast, PropulsionSystem(propulsionMicrocontroller))
 
     Runtime.getRuntime().addShutdownHook(Thread({ boat.shutdown() }))
     boat.start(io = Schedulers.io(), clock = Schedulers.computation())
