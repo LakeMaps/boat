@@ -17,7 +17,7 @@ internal class Datagram(address: String, port: Int) {
     fun recv(): ByteArray {
         val buffer = ByteArray(MAX_UDP_PACKET_SIZE)
         val packet = DatagramPacket(buffer, buffer.size)
-        socket.receive(packet);
+        socket.receive(packet)
         return Arrays.copyOf(buffer, packet.length)
     }
 
