@@ -45,7 +45,7 @@ fun main(args: Array<String>) {
 
     val boat = Boat(broadcast, PropulsionSystem(propulsionMicrocontroller))
 
-    Runtime.getRuntime().addShutdownHook(Thread({ boat.shutdown() }))
+    Runtime.getRuntime().addShutdownHook(Thread(boat::shutdown))
     boat.start(io = Schedulers.io(), clock = Schedulers.computation())
 
     Observable.interval(500, TimeUnit.MILLISECONDS)
