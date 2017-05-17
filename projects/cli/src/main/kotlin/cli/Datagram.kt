@@ -4,8 +4,6 @@ import java.net.DatagramPacket
 import java.net.DatagramSocket
 import java.net.InetAddress
 import java.util.Arrays
-import java.util.concurrent.locks.Lock
-import java.util.concurrent.locks.ReentrantLock
 
 internal class Datagram(address: String, port: Int) {
     companion object {
@@ -15,8 +13,6 @@ internal class Datagram(address: String, port: Int) {
     private val address = InetAddress.getByName(address)
 
     private val socket: DatagramSocket = DatagramSocket(port)
-
-    private val lock: Lock = ReentrantLock()
 
     fun recv(): ByteArray {
         val buffer = ByteArray(MAX_UDP_PACKET_SIZE)
