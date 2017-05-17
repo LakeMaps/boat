@@ -1,14 +1,14 @@
 package gps
 
 import gps.parser.Sentence
+import units.Decibel
 import units.Degree
 import units.Metre
+import units.MetrePerSecond
 import units.Quantity
 
 import org.junit.Assert
 import org.junit.Test
-import units.Decibel
-import units.MetrePerSecond
 
 import java.time.OffsetDateTime
 import java.time.OffsetTime

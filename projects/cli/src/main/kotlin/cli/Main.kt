@@ -2,7 +2,6 @@
 
 package cli
 
-import com.google.protobuf.InvalidProtocolBufferException
 import core.Boat
 import core.PropulsionSystem
 import core.broadcast.Broadcast
@@ -16,6 +15,7 @@ import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.locks.ReentrantLock
 
+import com.google.protobuf.InvalidProtocolBufferException
 import rx.Observable
 import rx.Subscriber
 import rx.broadcast.InMemoryBroadcast
