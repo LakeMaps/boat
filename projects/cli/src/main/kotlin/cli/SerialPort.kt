@@ -1,6 +1,6 @@
 package cli
 
-internal class SerialPort(private val name: String, val baudRate: Int) {
+internal class SerialPort(name: String, val baudRate: Int) {
     private val serialPort = com.fazecast.jSerialComm.SerialPort.getCommPort(name)!!
 
     private val readBuffer = ByteArray(1)
