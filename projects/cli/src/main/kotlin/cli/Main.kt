@@ -11,13 +11,13 @@ import core.values.Motion
 import gps.Gps
 import log.Log
 import microcontrollers.PropulsionMicrocontroller
-import microcontrollers.WirelessLinkMicrocontroller
 
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.locks.ReentrantLock
 
 import rx.Observable
+import rx.Subscriber
 import rx.broadcast.InMemoryBroadcast
 import rx.schedulers.Schedulers
 
@@ -31,16 +31,15 @@ const val STARTUP_MESSAGE = """
 
 fun main(args: Array<String>) {
     if (!args.any()) {
-        Log.wtf { "Missing filename for wireless and prop and GPS serial ports" }
+        Log.wtf { "Missing filename for wireless address, and prop and GPS serial ports" }
         return
     }
 
     val broadcast = Broadcast(InMemoryBroadcast())
 
-    val wSerialPort = SerialPort(args[0], baudRate = 57600)
+    val socket = Datagram(args[0], 12345)
     val pSerialPort = SerialPort(args[1], baudRate = 57600)
     val gSerialPort = SerialPort(args[2], baudRate =  9600)
-    val wirelessMicrocontroller = WirelessLinkMicrocontroller(ReentrantLock(), wSerialPort::recv, wSerialPort::send)
     val propulsionMicrocontroller = PropulsionMicrocontroller(ReentrantLock(), pSerialPort::recv, pSerialPort::send)
     val gpsMicrocontroller = Gps({ gSerialPort.recv().toChar() }, { msg -> broadcast.send(msg).subscribe() })
 
@@ -64,20 +63,23 @@ fun main(args: Array<String>) {
         .observeOn(Schedulers.io())
         .subscribe {
             Log.d {"Sending ${it.encode().size} bytes across the wire"}
-            wirelessMicrocontroller.send(it.encode())
+            socket.send(it.encode())
         }
 
-    val payloads = Observable.interval(boat.SLEEP_DURATION_MS, TimeUnit.MILLISECONDS)
-        .observeOn(Schedulers.io())
-        .map { wirelessMicrocontroller.receive() }
-        .onBackpressureLatest()
+    val payloads = Observable.create({
+        subscriber: Subscriber<in ByteArray> ->
+            while (true) {
+                val bytes = socket.recv()
+                subscriber.onNext(bytes)
+            }
+        })
+        .subscribeOn(Schedulers.io())
+        .onBackpressureDrop()
 
     val motions = payloads
         .observeOn(Schedulers.computation())
-        .filter { it.containsMessage }
-        .doOnNext { Log.d { "RSSI\t${it.rssi}" } }
         .map { try {
-            Motion.decode(it.body)
+            Motion.decode(it)
         } catch (e: InvalidProtocolBufferException) {
             Log.w { "$e" }
             null

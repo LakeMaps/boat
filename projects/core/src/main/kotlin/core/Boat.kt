@@ -15,7 +15,7 @@ import rx.subjects.PublishSubject
 import rx.subjects.Subject
 
 class Boat(private val broadcast: Broadcast, private val propulsionSystem: PropulsionSystem) {
-    val SLEEP_DURATION_MS = 30L
+    val SLEEP_DURATION_MS = 100L
 
     private val dead = AtomicBoolean()
 
