@@ -23,7 +23,7 @@ internal interface Microcontroller {
 
     private fun readMessage(): Message {
         var state: MessageState = MessageState.Started()
-        var buffer = ByteBuffer.allocate(128)
+        val buffer = ByteBuffer.allocate(128)
         while (true) {
             state = when (state) {
                 is MessageState.Started -> state.next(recv, { b -> buffer.put(b) })
