@@ -2,7 +2,7 @@ package core.control
 
 import core.collections.RingBuffer
 
-class ErrorState(size: Int) {
+internal class ErrorState(size: Int) {
     private val errors = RingBuffer(size)
 
     fun add(value: Double) = errors.add(value)
@@ -20,6 +20,4 @@ class ErrorState(size: Int) {
         val errors =  errors.array
         return errors.last()
     }
-
-    fun sum(f: (Double) -> Double) = errors.array.map(f).sum()
 }
