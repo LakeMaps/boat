@@ -1,11 +1,18 @@
 package core.geospatial
 
+import core.values.Position
 import units.Angle
 import units.Degree
 import units.Degree.convert
 import units.Quantity
 import units.Radian
 import units.Radian.convert
+
+fun bearing(a: Position, b: Position): Quantity<Angle, Degree> {
+    val point1 = Point(longitude = a.longitude, latitude = a.latitude)
+    val point2 = Point(longitude = b.longitude, latitude = b.latitude)
+    return bearing(point1, point2)
+}
 
 /**
  * Returns the initial heading from [a] to [b]

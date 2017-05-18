@@ -1,10 +1,17 @@
 package core.geospatial
 
+import core.values.Position
 import units.Degree.convert
 import units.Length
 import units.Metre
 import units.Quantity
 import units.Radian
+
+fun distance(a: Position, b: Position): Quantity<Length, Metre> {
+    val point1 = Point(longitude = a.longitude, latitude = a.latitude)
+    val point2 = Point(longitude = b.longitude, latitude = b.latitude)
+    return distance(point1, point2)
+}
 
 /**
  * Returns the great-circle distance between the given points
