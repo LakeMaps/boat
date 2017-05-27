@@ -2,7 +2,7 @@ package core.control
 
 import core.collections.RingBuffer
 
-class PidController(private val gains: Gains, private val clamp: (Double) -> Double): Controller {
+class PidController(private var gains: Gains, private val clamp: (Double) -> Double): Controller {
     data class Gains(val kp: Double, val ki: Double, val kd: Double)
 
     companion object {
@@ -35,5 +35,10 @@ class PidController(private val gains: Gains, private val clamp: (Double) -> Dou
         val (kp, _, kd) = gains
         val integral = integralTerms.array.sum()
         return clamp((kp * errors.last()) + integral + (kd * derivative))
+    }
+
+    fun setGains(gains: Gains): PidController {
+        this.gains = gains
+        return this
     }
 }
