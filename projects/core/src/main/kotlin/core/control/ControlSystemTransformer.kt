@@ -2,19 +2,20 @@ package core.control
 
 import rx.Observable
 import rx.Observable.Transformer
+import rx.Scheduler
+import rx.schedulers.Schedulers
 import rx.schedulers.Timestamped
 
-class ControlSystemTransformer<T>(private val setpoint: T, private val controller: ControlSystem<T>): Transformer<T, Double> {
-    var last: Timestamped<T>? = null
+class ControlSystemTransformer<T>(private val setpoint: T, private val controlSystems: Observable<ControlSystem<T>>, private val scheduler: Scheduler = Schedulers.computation()): Transformer<T, Double> {
+    private data class ValueControlSystemPair<T>(val value: Timestamped<T>, val controlSystem: ControlSystem<T>)
 
     override fun call(source: Observable<T>): Observable<Double> =
-        source.timestamp()
-            .scan(controller, { controller: ControlSystem<T>, curr: Timestamped<T> ->
-                val lastTimestampMillis = last?.timestampMillis ?: curr.timestampMillis
-                last = curr
-
-                controller.addValue(setpoint, curr.value, (lastTimestampMillis - curr.timestampMillis))
-                return@scan controller
-            })
-            .map(ControlSystem<T>::nextOutput)
+        source.timestamp(scheduler)
+            .withLatestFrom(controlSystems, { a, b -> ValueControlSystemPair(a, b) })
+            .scan { (previousValue), current: ValueControlSystemPair<T> ->
+                val (value, controlSystem) = current
+                controlSystem.addValue(setpoint, value.value, (value.timestampMillis - previousValue.timestampMillis))
+                current
+            }
+            .map { (_, controlSystem) -> controlSystem.nextOutput() }
 }
