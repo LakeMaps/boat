@@ -6,6 +6,7 @@ messages = [
     'Position',
     'TypedMessage',
     'Velocity',
+    'Waypoint',
 ];
 module.exports = Object.assign({}, null);
 messages.forEach((name) =>
