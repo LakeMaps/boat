@@ -7,6 +7,15 @@
     "build": "protoc --js_out='import_style=commonjs,binary:./' schemas/*.proto",
     "prepublishOnly": "npm run build"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LakeMaps/schemas.git"
+  },
+  "author": "Whymarrh Whitby <whymarrh.whitby@gmail.com> (https://whymarrh.com)",
+  "bugs": {
+    "url": "https://github.com/LakeMaps/schemas/issues"
+  },
+  "homepage": "https://github.com/LakeMaps/schemas",
   "dependencies": {
     "google-protobuf": "^3.2.0"
   }
