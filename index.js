@@ -1,5 +1,6 @@
 messages = [
     'Bytes',
+    'ControlMode',
     'Gps',
     'Motion',
     'Position',
