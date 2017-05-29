@@ -2,7 +2,7 @@
   "name": "@lakemaps/schemas",
   "description": "Lake Maps' message schemas",
   "license": "OSL-3.0",
-  "version": "3.1.1",
+  "version": "3.2.0",
   "scripts": {
     "build": "protoc --js_out='import_style=commonjs,binary:./' schemas/*.proto",
     "prepublishOnly": "npm run build"
