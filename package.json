@@ -17,6 +17,6 @@
   },
   "homepage": "https://github.com/LakeMaps/schemas",
   "dependencies": {
-    "google-protobuf": "^3.2.0"
+    "google-protobuf": "^3.3.0"
   }
 }
