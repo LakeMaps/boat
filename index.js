@@ -2,6 +2,7 @@ messages = [
     'Bytes',
     'ControlMode',
     'Gps',
+    'MissionInformation',
     'Motion',
     'Position',
     'TypedMessage',
