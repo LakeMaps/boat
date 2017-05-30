@@ -5,6 +5,7 @@ messages = [
     'Gps',
     'MissionInformation',
     'Motion',
+    'PidControllerGains',
     'Position',
     'TypedMessage',
     'Velocity',
