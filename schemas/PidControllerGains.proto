@@ -1,0 +1,10 @@
+syntax = "proto2";
+
+option java_package = "schemas";
+option java_outer_classname = "PidControllerGainsProtobuf";
+
+message PidControllerGains {
+    required double kp = 1;
+    required double ki = 2;
+    required double kd = 3;
+}

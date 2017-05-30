@@ -1,9 +1,11 @@
 messages = [
+    'BoatConfig',
     'Bytes',
     'ControlMode',
     'Gps',
     'MissionInformation',
     'Motion',
+    'PidControllerGains',
     'Position',
     'TypedMessage',
     'Velocity',

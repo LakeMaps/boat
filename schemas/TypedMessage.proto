@@ -3,6 +3,7 @@ syntax = "proto2";
 option java_package = "schemas";
 option java_outer_classname = "TypedMessageProtobuf";
 
+import "schemas/BoatConfig.proto";
 import "schemas/ControlMode.proto";
 import "schemas/Gps.proto";
 import "schemas/MissionInformation.proto";
@@ -16,6 +17,7 @@ message TypedMessage {
         CONTROL_MODE = 3;
         WAYPOINT = 4;
         MISSION_INFORMATION = 5;
+        BOAT_CONFIG = 6;
     }
 
     required Type type = 1;
@@ -26,4 +28,5 @@ message TypedMessage {
     optional ControlMode control_mode = 12;
     optional Waypoint waypoint = 13;
     optional MissionInformation mission_information = 14;
+    optional BoatConfig boat_config = 15;
 }
