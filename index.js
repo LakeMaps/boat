@@ -1,4 +1,5 @@
 messages = [
+    'BoatConfig',
     'Bytes',
     'ControlMode',
     'Gps',
