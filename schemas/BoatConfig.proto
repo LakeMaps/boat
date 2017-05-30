@@ -1,7 +1,7 @@
 syntax = "proto2";
 
 option java_package = "schemas";
-option java_outer_classname = "WaypointProtobuf";
+option java_outer_classname = "BoatConfigProtobuf";
 
 import "schemas/PidControllerGains.proto";
 
