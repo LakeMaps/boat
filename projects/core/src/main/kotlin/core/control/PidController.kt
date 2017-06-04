@@ -28,7 +28,7 @@ class PidController(private var gains: Gains, private val clamp: (Double) -> Dou
         errors.add(value)
 
         integralTerms.add(clamp(value * dtMs * ki))
-        derivative = (errors.nth(-1) - errors.last()) / dtMs
+        derivative = (errors.last() - errors.nth(-1)) / dtMs
     }
 
     override fun nextOutput(): Double {
