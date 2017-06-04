@@ -2,7 +2,7 @@ package core.control
 
 import core.collections.RingBuffer
 
-class PidController(private var gains: Gains, private val clamp: (Double) -> Double): Controller {
+class PidController(private var gains: Gains, private val clamp: (Double) -> Double, ti: Int = 4): Controller {
     data class Gains(val kp: Double, val ki: Double, val kd: Double)
 
     companion object {
@@ -11,7 +11,7 @@ class PidController(private var gains: Gains, private val clamp: (Double) -> Dou
 
     private val errors = ErrorState(BUFFER_SIZE)
 
-    private val integralTerms = RingBuffer(BUFFER_SIZE)
+    private val integralTerms = RingBuffer(ti)
 
     private var derivative = 0.0
 
