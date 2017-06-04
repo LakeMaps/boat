@@ -121,7 +121,7 @@ class ControlSystemTransformerTest {
         testSubscriber.awaitTerminalEvent(TIMEOUT_MS, TimeUnit.MILLISECONDS)
         testSubscriber.assertNoErrors()
         testSubscriber.assertCompleted()
-        testSubscriber.assertReceivedOnNext(listOf(0.0, 5.0))
+        testSubscriber.assertReceivedOnNext(listOf(0.0, 15.0))
     }
 
     @Test
@@ -158,7 +158,7 @@ class ControlSystemTransformerTest {
         testSubscriber.awaitTerminalEvent(TIMEOUT_MS, TimeUnit.MILLISECONDS)
         testSubscriber.assertNoErrors()
         testSubscriber.assertCompleted()
-        testSubscriber.assertReceivedOnNext(listOf(0.0, 5.0, 13.0, 17.0))
+        testSubscriber.assertReceivedOnNext(listOf(0.0, 15.0, 9.0, 23.0))
     }
 
     @Test
@@ -223,6 +223,6 @@ class ControlSystemTransformerTest {
         testSubscriber.awaitTerminalEvent(TIMEOUT_MS, TimeUnit.MILLISECONDS)
         testSubscriber.assertNoErrors()
         testSubscriber.assertCompleted()
-        testSubscriber.assertReceivedOnNext(listOf(0.0, 5.0, 16.0, 24.0, 33.0, 38.0, 33.0, 17.0, 10.0, 6.0, 12.0))
+        testSubscriber.assertReceivedOnNext(listOf(0.0, 15.0, 18.0, 26.0, 35.0, 40.0, 15.0, 17.0, 12.0, 12.0, 10.0))
     }
 }

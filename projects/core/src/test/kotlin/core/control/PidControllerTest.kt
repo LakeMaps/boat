@@ -39,6 +39,6 @@ class PidControllerTest {
 
         controller.addError(e(setpoint, 5.0), 1)
 
-        Assert.assertEquals(5.0, controller.nextOutput(), DELTA)
+        Assert.assertEquals(15.0, controller.nextOutput(), DELTA)
     }
 }
