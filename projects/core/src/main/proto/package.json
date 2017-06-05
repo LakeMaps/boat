@@ -2,12 +2,21 @@
   "name": "@lakemaps/schemas",
   "description": "Lake Maps' message schemas",
   "license": "OSL-3.0",
-  "version": "3.1.1",
+  "version": "3.3.1",
   "scripts": {
     "build": "protoc --js_out='import_style=commonjs,binary:./' schemas/*.proto",
     "prepublishOnly": "npm run build"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LakeMaps/schemas.git"
+  },
+  "author": "Whymarrh Whitby <whymarrh.whitby@gmail.com> (https://whymarrh.com)",
+  "bugs": {
+    "url": "https://github.com/LakeMaps/schemas/issues"
+  },
+  "homepage": "https://github.com/LakeMaps/schemas",
   "dependencies": {
-    "google-protobuf": "^3.2.0"
+    "google-protobuf": "^3.3.0"
   }
 }

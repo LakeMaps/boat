@@ -1,0 +1,13 @@
+syntax = "proto2";
+
+option java_package = "schemas";
+option java_outer_classname = "BoatConfigProtobuf";
+
+import "schemas/PidControllerGains.proto";
+
+message BoatConfig {
+    required PidControllerGains surge_controller_gains = 1;
+    required double surge_controller_dt = 2;
+    required PidControllerGains yaw_controller_gains = 3;
+    required double yaw_controller_dt = 4;
+}
