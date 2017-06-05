@@ -6,7 +6,18 @@ sealed class Unit<U: Unit<U>>(val symbol: String) {
 }
 
 sealed class Angle(symbol: String): Unit<Angle>(symbol)
-object Degree: Angle("°")
+object Degree: Angle("°") {
+    inline fun <reified T: Angle> Quantity<Angle, Degree>.convert(to: Angle): Quantity<Angle, T> = when (to) {
+        Degree -> Quantity(value, to as T)
+        Radian -> Quantity(value * Math.PI / 180, to as T)
+    }
+}
+object Radian: Angle("") {
+    inline fun <reified T: Angle> Quantity<Angle, Radian>.convert(to: Angle): Quantity<Angle, T> = when (to) {
+        Radian -> Quantity(value, to as T)
+        Degree -> Quantity(value / Math.PI * 180, to as T)
+    }
+}
 
 sealed class Length(symbol: String): Unit<Length>(symbol)
 object Metre: Length("m")
