@@ -1,0 +1,12 @@
+syntax = "proto2";
+
+option java_package = "schemas";
+option java_outer_classname = "ControlModeProtobuf";
+
+message ControlMode {
+    enum Mode {
+        MANUAL = 0;
+        WAYPOINT = 1;
+    }
+    required Mode mode = 1;
+}

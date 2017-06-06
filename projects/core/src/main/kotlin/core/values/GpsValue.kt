@@ -4,6 +4,7 @@ import gps.GpsFix
 import gps.GpsNavInfo
 import schemas.GpsProtobuf
 import schemas.PositionProtobuf
+import schemas.TypedMessageProtobuf
 import schemas.VelocityProtobuf
 
 data class GpsValue(val horizontalDilutionOfPrecision: Float, val position: Position, val velocity: Velocity) {
@@ -32,15 +33,17 @@ data class GpsValue(val horizontalDilutionOfPrecision: Float, val position: Posi
     }
 
     fun encode(): ByteArray {
-        return GpsProtobuf.Gps.newBuilder()
-            .setHorizontalDilutionOfPrecision(horizontalDilutionOfPrecision)
-            .setPosition(PositionProtobuf.Position.newBuilder()
-                .setElevation(position.elevation.value)
-                .setLongitude(position.longitude.value)
-                .setLatitude(position.latitude.value))
-            .setVelocity(VelocityProtobuf.Velocity.newBuilder()
-                .setSpeed(velocity.speed.value)
-                .setTrueBearing(velocity.trueBearing.value))
+        return TypedMessageProtobuf.TypedMessage.newBuilder()
+            .setType(TypedMessageProtobuf.TypedMessage.Type.GPS)
+            .setGps(GpsProtobuf.Gps.newBuilder()
+                .setHorizontalDilutionOfPrecision(horizontalDilutionOfPrecision)
+                .setPosition(PositionProtobuf.Position.newBuilder()
+                    .setElevation(position.elevation.value)
+                    .setLongitude(position.longitude.value)
+                    .setLatitude(position.latitude.value))
+                .setVelocity(VelocityProtobuf.Velocity.newBuilder()
+                    .setSpeed(velocity.speed.value)
+                    .setTrueBearing(velocity.trueBearing.value)))
             .build()
             .toByteArray()
     }

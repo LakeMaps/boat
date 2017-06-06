@@ -1,0 +1,8 @@
+syntax = "proto2";
+
+option java_package = "schemas";
+option java_outer_classname = "MissionInformationProtobuf";
+
+message MissionInformation {
+    required double distance_to_waypoint = 1;
+}
