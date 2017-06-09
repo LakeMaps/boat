@@ -22,7 +22,9 @@ dependencies {
     compile("com.google.protobuf:protobuf-java:3.3.0")
     compile("org.tinylog:tinylog:1.1")
     compile("io.reactivex:rxjava:1.3.0")
-    compile("rxbroadcast:rxbroadcast:1.1.0")
+    compile("rxbroadcast:rxbroadcast:1.2.0") {
+        exclude(group = "com.esotericsoftware", module = "kryo")
+    }
     testCompile("junit:junit:4.12")
     testCompile("org.jetbrains.kotlin:kotlin-test-junit")
 }
