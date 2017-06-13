@@ -9,6 +9,12 @@ import schemas.VelocityProtobuf
 
 data class GpsValue(val horizontalDilutionOfPrecision: Float, val position: Position, val velocity: Velocity) {
     companion object {
+        private inline fun <T1, T2, R> let(a: T1?, b: T2?, block: (T1, T2) -> R): R?
+            = if (a != null && b != null) block(a, b) else null
+
+        private inline fun <T1, T2, T3, R> let(a: T1?, b: T2?, c: T3?, block: (T1, T2, T3) -> R): R?
+            = if (a != null && b != null && c != null) block(a, b, c) else null
+
         fun from(foo: GpsNavInfo, bar: GpsFix): GpsValue? {
             val hdop = bar.dilutionOfPrecision?.horizontal
             val altitude = bar.altitude
@@ -16,19 +22,9 @@ data class GpsValue(val horizontalDilutionOfPrecision: Float, val position: Posi
             val latitude = foo.position?.latitude
             val speed = foo.speed
             val course = foo.course
-            return if (
-                   hdop != null
-                && altitude != null
-                && longitude != null
-                && latitude != null
-                && speed != null
-                && course != null
-            ) {
-                val position = Position(longitude, latitude, altitude)
-                GpsValue(hdop.toFloat(), position, Velocity(speed, course))
-            } else {
-                null
-            }
+            val position = let(longitude, latitude, altitude, ::Position)
+            val velocity = let(speed, course, ::Velocity)
+            return let(hdop?.toFloat(), position, velocity, ::GpsValue)
         }
     }
 
