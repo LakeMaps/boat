@@ -64,10 +64,10 @@ fun main(args: Array<String>) {
 
     broadcast.valuesOfType<GpsValue>()
         .observeOn(Schedulers.io())
-        .subscribe { udpBroadcast.send(it) }
+        .subscribe { udpBroadcast.send(it).subscribe() }
 
     udpBroadcast.valuesOfType<Any>()
-        .subscribe { broadcast.send(it) }
+        .subscribe { broadcast.send(it).subscribe() }
 
     Log.d { STARTUP_MESSAGE }
     CountDownLatch(1).await()
