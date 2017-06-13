@@ -7,7 +7,7 @@ import schemas.PositionProtobuf
 import schemas.TypedMessageProtobuf
 import schemas.VelocityProtobuf
 
-data class GpsValue(val horizontalDilutionOfPrecision: Float, val position: Position, val velocity: Velocity) {
+data class GpsValue(val horizontalDilutionOfPrecision: Float, val position: Position, val velocity: Velocity): ProtoSerializable {
     companion object {
         private inline fun <T1, T2, R> let(a: T1?, b: T2?, block: (T1, T2) -> R): R?
             = if (a != null && b != null) block(a, b) else null
@@ -28,7 +28,7 @@ data class GpsValue(val horizontalDilutionOfPrecision: Float, val position: Posi
         }
     }
 
-    fun encode(): ByteArray {
+    override fun encode(): ByteArray {
         return TypedMessageProtobuf.TypedMessage.newBuilder()
             .setType(TypedMessageProtobuf.TypedMessage.Type.GPS)
             .setGps(GpsProtobuf.Gps.newBuilder()
