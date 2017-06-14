@@ -1,17 +1,12 @@
 package core.values
 
-import schemas.ControlModeProtobuf
-import schemas.TypedMessageProtobuf
+import schemas.ControlModeProtobuf.ControlMode.Mode
 
 sealed class ControlMode {
     companion object {
-        fun decode(bytes: ByteArray): ControlMode {
-            val obj = TypedMessageProtobuf.TypedMessage.parseFrom(bytes)
-            val controlMode = obj.controlMode
-            return when (controlMode.mode!!) {
-                ControlModeProtobuf.ControlMode.Mode.MANUAL -> MANUAL
-                ControlModeProtobuf.ControlMode.Mode.WAYPOINT -> WAYPOINT
-            }
+        fun decode(bytes: ByteArray) = when (typedMessage(bytes).controlMode.mode!!) {
+            Mode.MANUAL -> MANUAL
+            Mode.WAYPOINT -> WAYPOINT
         }
     }
 

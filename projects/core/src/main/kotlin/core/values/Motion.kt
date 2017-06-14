@@ -1,7 +1,5 @@
 package core.values
 
-import schemas.TypedMessageProtobuf
-
 data class Motion(val surge: Double, val yaw: Double) {
     companion object {
         fun clamp(value: Double) = when {
@@ -10,10 +8,6 @@ data class Motion(val surge: Double, val yaw: Double) {
             else -> value
         }
 
-        fun decode(bytes: ByteArray): Motion {
-            val obj = TypedMessageProtobuf.TypedMessage.parseFrom(bytes)
-            val motion = obj.motion
-            return Motion(motion.surge, motion.yaw)
-        }
+        fun decode(bytes: ByteArray) = typedMessage(bytes).motion.let { Motion(it.surge, it.yaw) }
     }
 }
