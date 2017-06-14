@@ -15,13 +15,13 @@ data class GpsValue(val horizontalDilutionOfPrecision: Float, val position: Posi
         private inline fun <T1, T2, T3, R> let(a: T1?, b: T2?, c: T3?, block: (T1, T2, T3) -> R): R?
             = if (a != null && b != null && c != null) block(a, b, c) else null
 
-        fun from(foo: GpsNavInfo, bar: GpsFix): GpsValue? {
-            val hdop = bar.dilutionOfPrecision?.horizontal
-            val altitude = bar.altitude
-            val longitude = foo.position?.longitude
-            val latitude = foo.position?.latitude
-            val speed = foo.speed
-            val course = foo.course
+        fun from(navInfo: GpsNavInfo, fix: GpsFix): GpsValue? {
+            val hdop = fix.dilutionOfPrecision?.horizontal
+            val altitude = fix.altitude
+            val longitude = navInfo.position?.longitude
+            val latitude = navInfo.position?.latitude
+            val speed = navInfo.speed
+            val course = navInfo.course
             val position = let(longitude, latitude, altitude, ::Position)
             val velocity = let(speed, course, ::Velocity)
             return let(hdop?.toFloat(), position, velocity, ::GpsValue)
