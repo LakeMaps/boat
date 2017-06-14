@@ -83,7 +83,7 @@ class Boat(private val broadcast: Broadcast, private val propulsionSystem: Propu
             .switchMap({
                 when (it) {
                     ControlMode.MANUAL   -> broadcast.valuesOfType<Motion>()
-                    ControlMode.WAYPOINT -> Observable.combineLatest(surge, yaw, ::Motion).startWith(Motion(0.0, 0.0))
+                    ControlMode.WAYPOINT -> Observable.combineLatest(surge, yaw, ::Motion).startWith(Motion.ZERO)
                 }
             })
             .map(this::speed)
@@ -104,7 +104,7 @@ class Boat(private val broadcast: Broadcast, private val propulsionSystem: Propu
             }
         }
 
-        tick(speed(Motion(0.0, 0.0)))
+        tick(speed(Motion.ZERO))
     }
 
     private fun tick(outputs: Pair<Double, Double>) {
