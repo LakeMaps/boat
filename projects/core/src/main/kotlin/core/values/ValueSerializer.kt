@@ -4,7 +4,7 @@ import schemas.TypedMessageProtobuf.TypedMessage.Type
 
 import rx.broadcast.Serializer
 
-class TypedMessageSerializer: Serializer<Any> {
+class ValueSerializer : Serializer<Any> {
     override fun decode(data: ByteArray): Any = when (typedMessage(data).type!!) {
         Type.BOAT_CONFIG -> BoatConfig.decode(data)
         Type.CONTROL_MODE -> ControlMode.decode(data)

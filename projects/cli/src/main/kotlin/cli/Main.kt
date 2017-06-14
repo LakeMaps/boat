@@ -6,7 +6,7 @@ import core.Boat
 import core.PropulsionSystem
 import core.broadcast.*
 import core.values.GpsValue
-import core.values.TypedMessageSerializer
+import core.values.ValueSerializer
 import gps.Gps
 import log.Log
 import microcontrollers.PropulsionMicrocontroller
@@ -40,7 +40,7 @@ fun main(args: Array<String>) {
     val broadcast = InMemoryBroadcast()
     val port = 12345
     val udpBroadcast = UdpBroadcast(
-        DatagramSocket(port), InetAddress.getByName(args[0]), port, TypedMessageSerializer(), BasicOrder())
+        DatagramSocket(port), InetAddress.getByName(args[0]), port, ValueSerializer(), BasicOrder())
     val pSerialPort = SerialPort(args[1], baudRate = 57600)
     val gSerialPort = SerialPort(args[2], baudRate =  9600)
     val propulsionMicrocontroller = PropulsionMicrocontroller(ReentrantLock(), pSerialPort::recv, pSerialPort::send)
