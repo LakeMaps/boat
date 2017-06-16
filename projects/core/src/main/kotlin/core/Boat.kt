@@ -86,7 +86,6 @@ class Boat(private val broadcast: Broadcast, private val propulsionSystem: Propu
                     ControlMode.WAYPOINT -> Observable.combineLatest(surge, yaw, ::Motion).startWith(Motion.ZERO)
                 }
             })
-            .map(this::speed)
 
         gps.observeOn(io).subscribe { broadcast.send(it).toBlocking().subscribe() }
 
@@ -104,35 +103,10 @@ class Boat(private val broadcast: Broadcast, private val propulsionSystem: Propu
             }
         }
 
-        tick(speed(Motion.ZERO))
+        tick(Motion.ZERO)
     }
 
-    private fun tick(outputs: Pair<Double, Double>) {
-        val (a, b) = outputs
-        propulsionSystem.setSpeed(a, b)
-    }
-
-    private fun speed(motion: Motion): Pair<Double, Double> {
-        var r: Double
-        var l: Double
-        val (surge, yaw) = motion
-
-        if (surge == 0.0 && yaw == 0.0) {
-            return Pair(0.0, 0.0)
-        }
-
-        r = surge + yaw
-        l = surge - yaw
-
-        val maxInputMagnitude = maxOf(Math.abs(surge), Math.abs(yaw))
-        val maxThrustMagnitude = maxOf(Math.abs(r), Math.abs(l))
-        val scalar = maxInputMagnitude / maxThrustMagnitude
-
-        r *= scalar
-        l *= scalar
-
-        return Pair(l, r)
-    }
+    private fun tick(desiredMotion: Motion) = propulsionSystem.setSpeed(desiredMotion)
 
     private fun fail(exception: Throwable): Nothing = throw RuntimeException(exception)
 }
