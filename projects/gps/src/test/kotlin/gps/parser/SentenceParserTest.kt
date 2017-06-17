@@ -693,6 +693,8 @@ class SentenceParserCommandPacketTest(private val message: String) {
         fun data() : Collection<Array<String>> {
             return listOf(
                 // From the PMTK command packet
+                arrayOf("\$PMTK010,001*2E"),
+                arrayOf("\$PMTK011,MTKGPS*08"),
                 arrayOf("\$PMTK220,100*2F"),
                 arrayOf("\$PMTK251,57600*2C")
             )
