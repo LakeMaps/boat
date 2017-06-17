@@ -1,5 +1,7 @@
 package gps.parser
 
+import java.util.Arrays
+
 internal sealed class SentenceState {
     companion object {
         const val MAXIMUM_SENTENCE_LENGTH = 82
@@ -17,8 +19,14 @@ internal sealed class SentenceState {
     }
 
     internal class Talker: SentenceState() {
+        private val PM_TALKER_ID = charArrayOf('P', 'M')
+
         fun next(recv: () -> Char): SentenceState {
-            val talker = charArrayOf(recv(), recv())
+            var talker = charArrayOf(recv(), recv())
+            if (Arrays.equals(talker, PM_TALKER_ID)) {
+                // The PM Talker ID is four bytes
+                talker += charArrayOf(recv(), recv())
+            }
             return SentenceState.MessageType(talker)
         }
     }
