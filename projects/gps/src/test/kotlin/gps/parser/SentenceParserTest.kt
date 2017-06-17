@@ -695,6 +695,7 @@ class SentenceParserCommandPacketTest(private val message: String) {
                 // From the PMTK command packet
                 arrayOf("\$PMTK010,001*2E"),
                 arrayOf("\$PMTK011,MTKGPS*08"),
+                arrayOf("\$PMTK001,604,3*32"),
                 arrayOf("\$PMTK220,100*2F"),
                 arrayOf("\$PMTK251,57600*2C")
             )
