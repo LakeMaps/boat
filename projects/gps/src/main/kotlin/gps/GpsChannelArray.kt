@@ -12,7 +12,7 @@ class GpsChannelArray(val channels: IntArray) {
         if (this === other) {
             return true
         }
-        if (other?.let { it::class.java } != this::class.java) {
+        if (other?.javaClass != this.javaClass) {
             return false
         }
 
