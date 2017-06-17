@@ -40,9 +40,12 @@ internal sealed class SentenceState {
             // valid with the correct fields and whatnot. If that turns out to not be the
             // case, we might regret this decision.
             val type = charArrayOf(recv(), recv(), recv())
-            // This next char should be field delimiter and we'll throw it away
-            recv()
-            return SentenceState.Fields(talker, type)
+            return when (recv()) {
+                Sentence.FIELD_DELIMITER -> SentenceState.Fields(talker, type)
+                Sentence.CHECKSUM_DELIMITER -> SentenceState.Checksum(talker, type, arrayOf())
+                // We seem to have recv'd something incorrect
+                else -> SentenceState.Prefix()
+            }
         }
     }
 
