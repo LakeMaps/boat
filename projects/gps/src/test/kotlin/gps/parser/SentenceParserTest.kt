@@ -684,3 +684,34 @@ class SentenceParserEdgeCasesTest(msg: String, private val expected: String, pri
         Assert.assertEquals(expected, sentence.toString())
     }
 }
+
+@RunWith(Parameterized::class)
+class SentenceParserCommandPacketTest(private val message: String) {
+    companion object {
+        @JvmStatic
+        @Parameterized.Parameters(name = "{0}")
+        fun data() : Collection<Array<String>> {
+            return listOf(
+                // From the PMTK command packet
+                arrayOf("\$PMTK010,001*2E"),
+                arrayOf("\$PMTK011,MTKGPS*08"),
+                arrayOf("\$PMTK001,604,3*32"),
+                arrayOf("\$PMTK220,100*2F"),
+                arrayOf("\$PMTK101*32"),
+                arrayOf("\$PMTK102*31"),
+                arrayOf("\$PMTK103*30"),
+                arrayOf("\$PMTK104*37"),
+                arrayOf("\$PMTK251,57600*2C")
+            )
+        }
+    }
+
+    @Test(timeout = 10000)
+    fun parseMessage() {
+        val chars = message.toCharArray()
+        var count = 0
+        val parser = SentenceParser({ chars[count++] })
+        val sentence = parser.nextMessage()
+        Assert.assertEquals(sentence.toString(), message)
+    }
+}
