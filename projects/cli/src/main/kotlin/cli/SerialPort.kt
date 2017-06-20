@@ -19,4 +19,8 @@ internal class SerialPort(name: String, val baudRate: Int) {
     fun send(bytes: ByteArray) {
         serialPort.writeBytes(bytes, bytes.size.toLong())
     }
+
+    fun disconnect() {
+        serialPort.closePort()
+    }
 }
