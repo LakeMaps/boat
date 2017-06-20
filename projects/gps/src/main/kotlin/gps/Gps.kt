@@ -33,8 +33,20 @@ import java.time.format.DateTimeFormatter
  * @param recv an input function returning a character from the GPS
  * @param callback an output function accepting a GPS sentence
  */
-class Gps(recv: () -> Char, private val callback: (Any) -> Unit) {
+class Gps(recv: () -> Char, private val send: (ByteArray) -> Unit, private val callback: (Any) -> Unit) {
     private val parser = SentenceParser(recv)
+
+    fun setNmeaBaudRate(baudRate: PMTK.BaudRate) {
+        val sentence = Sentence("PMTK", "251", arrayOf(baudRate.baudRate.toString()))
+        send(sentence.toString().toByteArray(Charsets.US_ASCII))
+        poll()
+    }
+
+    fun setNmeaUpdateRate(updateRate: PMTK.UpdateRate) {
+        val sentence = Sentence("PMTK", "220", arrayOf(updateRate.milliseconds.toString()))
+        send(sentence.toString().toByteArray(Charsets.US_ASCII))
+        poll()
+    }
 
     fun poll() {
         val sentence = parser.nextMessage()

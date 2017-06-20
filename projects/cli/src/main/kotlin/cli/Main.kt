@@ -8,6 +8,7 @@ import core.broadcast.*
 import core.values.GpsValue
 import core.values.ValueSerializer
 import gps.Gps
+import gps.PMTK
 import log.Log
 import microcontrollers.PropulsionMicrocontroller
 
@@ -42,11 +43,16 @@ fun main(args: Array<String>) {
     val udpBroadcast = UdpBroadcast(
         DatagramSocket(port), InetAddress.getByName(args[0]), port, ValueSerializer(), BasicOrder())
     val pSerialPort = SerialPort(args[1], baudRate = 57600)
-    val gSerialPort = SerialPort(args[2], baudRate =  9600)
+    var gSerialPort = SerialPort(args[2], baudRate =  9600)
     val propulsionMicrocontroller = PropulsionMicrocontroller(ReentrantLock(), pSerialPort::recv, pSerialPort::send)
-    val gpsReceiver = Gps({ gSerialPort.recv().toChar() }, { msg -> broadcast.send(msg).subscribe() })
+    val gpsReceiver = Gps({ gSerialPort.recv().toChar() }, gSerialPort::send, { msg -> broadcast.send(msg).subscribe() })
 
     val boat = Boat(broadcast, PropulsionSystem(propulsionMicrocontroller))
+
+    gpsReceiver.setNmeaBaudRate(PMTK.BaudRate.BAUD_RATE_57600)
+    gSerialPort.disconnect()
+    gSerialPort = gSerialPort.copy(baudRate = 57600)
+    gpsReceiver.setNmeaUpdateRate(PMTK.UpdateRate(100))
 
     Runtime.getRuntime().addShutdownHook(Thread(boat::shutdown))
     boat.start(io = Schedulers.io(), clock = Schedulers.computation())
