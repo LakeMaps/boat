@@ -44,7 +44,7 @@ fun main(args: Array<String>) {
     val pSerialPort = SerialPort(args[1], baudRate = 57600)
     val gSerialPort = SerialPort(args[2], baudRate =  9600)
     val propulsionMicrocontroller = PropulsionMicrocontroller(ReentrantLock(), pSerialPort::recv, pSerialPort::send)
-    val gpsMicrocontroller = Gps({ gSerialPort.recv().toChar() }, { msg -> broadcast.send(msg).subscribe() })
+    val gpsReceiver = Gps({ gSerialPort.recv().toChar() }, { msg -> broadcast.send(msg).subscribe() })
 
     val boat = Boat(broadcast, PropulsionSystem(propulsionMicrocontroller))
 
@@ -55,7 +55,7 @@ fun main(args: Array<String>) {
         .observeOn(Schedulers.io())
         .subscribe {
             try {
-                gpsMicrocontroller.poll()
+                gpsReceiver.poll()
             } catch (e: Exception) {
                 Log.w { "$e" }
                 /* TODO: issue #67 */
