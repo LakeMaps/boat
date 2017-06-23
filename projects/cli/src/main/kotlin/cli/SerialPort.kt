@@ -11,10 +11,12 @@ internal data class SerialPort(val name: String, val baudRate: Int) {
         serialPort.setComPortTimeouts(com.fazecast.jSerialComm.SerialPort.TIMEOUT_READ_BLOCKING, 0, 0)
     }
 
-    fun recv(): Byte {
+    fun recvByte(): Byte {
         serialPort.readBytes(readBuffer, 1)
         return readBuffer.first()
     }
+
+    fun recvChar(): Char = recvByte().toChar()
 
     fun send(bytes: ByteArray) {
         serialPort.writeBytes(bytes, bytes.size.toLong())
