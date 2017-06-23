@@ -50,9 +50,11 @@ fun main(args: Array<String>) {
     val boat = Boat(broadcast, PropulsionSystem(propulsionMicrocontroller))
 
     gpsReceiver.setNmeaBaudRate(PMTK.BaudRate.BAUD_RATE_57600)
+    gpsReceiver.poll()
     gSerialPort.disconnect()
     gSerialPort = gSerialPort.copy(baudRate = 57600)
     gpsReceiver.setNmeaUpdateRate(PMTK.UpdateRate(100))
+    gpsReceiver.poll()
 
     Runtime.getRuntime().addShutdownHook(Thread(boat::shutdown))
     boat.start(io = Schedulers.io(), clock = Schedulers.computation())
