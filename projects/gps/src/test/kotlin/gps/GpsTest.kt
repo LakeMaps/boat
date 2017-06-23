@@ -17,7 +17,7 @@ import java.time.ZoneOffset
 class GpsTest {
     @Test
     fun testVtgSentence() {
-        val gps = Gps({ '?' }, { })
+        val gps = Gps({ '?' }, { }, { })
         val vtg = gps.vtg(Sentence("GP", "VTG", arrayOf("165.48", "T", "", "M", "0.03", "N", "0.06", "K", "A")))
 
         Assert.assertEquals(GpsGroundVelocity(Quantity(165.48, Degree), Quantity(0.01543333332, MetrePerSecond), 'A'), vtg)
@@ -30,7 +30,7 @@ class GpsTest {
         val position = GpsPosition(latitude = Quantity(23.11876, Degree), longitude = Quantity(120.27406333333333, Degree))
         val expectedGpsNavInfo = GpsNavInfo(time, true, position, Quantity(0.01543333332, MetrePerSecond), Quantity(165.48, Degree), 'A')
 
-        val gps = Gps({ '?' }, { })
+        val gps = Gps({ '?' }, { }, { })
         val rmc = gps.rmc(Sentence("GP", "RMC", arrayOf("064951.000", "A", "2307.1256", "N", "12016.4438", "E", "0.03", "165.48", "260406", "3.05", "W", "A")))
 
         Assert.assertEquals(expectedGpsNavInfo, rmc)
@@ -46,7 +46,7 @@ class GpsTest {
         val channel4 = GpsSatelliteMessage(15, Quantity(21, Degree), Quantity(321, Degree), Quantity(39, Decibel))
         val expectedGsv = GpsSatellitesInView(3, 1, 9, channel1, channel2, channel3, channel4)
 
-        val gps = Gps({ '?' }, { })
+        val gps = Gps({ '?' }, { }, { })
         val gsv = gps.gsv(Sentence("GP", "GSV", arrayOf("3", "1", "09", "29", "36", "029", "42", "21", "46", "314", "43", "26", "44", "020", "43", "15", "21", "321", "39")))
 
         Assert.assertEquals(expectedGsv, gsv)
@@ -60,7 +60,7 @@ class GpsTest {
         val channel4 = GpsSatelliteMessage(10, Quantity(26, Degree), Quantity( 84, Degree), Quantity(37, Decibel))
         val expectedGsv = GpsSatellitesInView(3, 2, 9, channel1, channel2, channel3, channel4)
 
-        val gps = Gps({ '?' }, { })
+        val gps = Gps({ '?' }, { }, { })
         val gsv = gps.gsv(Sentence("GP", "GSV", arrayOf("3", "2", "09", "18", "26", "314", "40", "09", "57", "170", "44", "06", "20", "229", "37", "10", "26", "084", "37")))
 
         Assert.assertEquals(expectedGsv, gsv)
@@ -71,7 +71,7 @@ class GpsTest {
         val channel1 = GpsSatelliteMessage(7, null,  null, Quantity(26, Decibel))
         val expectedGsv = GpsSatellitesInView(3, 3, 9, channel1)
 
-        val gps = Gps({ '?' }, { })
+        val gps = Gps({ '?' }, { }, { })
         val gsv = gps.gsv(Sentence("GP", "GSV", arrayOf("3", "3", "09", "07", "", "", "26")))
 
         Assert.assertEquals(expectedGsv, gsv)
@@ -81,7 +81,7 @@ class GpsTest {
     fun testGsaSentence() {
         val expectedGsa = GpsActiveSatellites('A', '3', GpsChannelArray(intArrayOf(29, 21, 26, 15, 18, 9, 6, 10)), GpsDilutionOfPrecision(2.32, 0.95, 2.11))
 
-        val gps = Gps({ '?' }, { })
+        val gps = Gps({ '?' }, { }, { })
         val gsa = gps.gsa(Sentence("GP", "GSA", arrayOf("A", "3", "29", "21", "26", "15", "18", "09", "06", "10", "", "", "", "", "2.32", "0.95", "2.11")))
 
         Assert.assertEquals(expectedGsa, gsa)
@@ -95,7 +95,7 @@ class GpsTest {
         val position = GpsPosition(latitude = Quantity(23.11876, Degree), longitude = Quantity(120.27406333333333, Degree))
         val expected = GpsFix(time, position, '1', 8, GpsDilutionOfPrecision(horizontal = 0.95), Quantity(39.9, Metre), Quantity(17.8, Metre))
 
-        val gps = Gps({ '?' }, { })
+        val gps = Gps({ '?' }, { }, { })
         val gsa = gps.gga(Sentence("GP", "GGA", arrayOf("064951.000", "2307.1256", "N", "12016.4438", "E", "1", "8", "0.95", "39.9", "M", "17.8", "M", "", "")))
 
         Assert.assertEquals(expected, gsa)
@@ -105,7 +105,7 @@ class GpsTest {
     fun testEmptyGgaSentence() {
         val expected = GpsFix(OffsetTime.of(6, 49, 51, 0, ZoneOffset.UTC), null, '0', 1, null, null, null)
 
-        val gps = Gps({ '?' }, { })
+        val gps = Gps({ '?' }, { }, { })
         val gsa = gps.gga(Sentence("GP", "GGA", arrayOf("064951.000", "", "", "", "", "0", "01", "", "", "", "", "", "", "")))
 
         Assert.assertEquals(expected, gsa)
@@ -116,7 +116,7 @@ class GpsTest {
         val time = OffsetDateTime.of(2006, 4, 26, 6, 49, 51, 0, ZoneOffset.UTC)
         val expectedGpsNavInfo = GpsNavInfo(time, false, null, null, null, 'N')
 
-        val gps = Gps({ '?' }, { })
+        val gps = Gps({ '?' }, { }, { })
         val rmc = gps.rmc(Sentence("GP", "RMC", arrayOf("064951.000", "V", "", "", "", "", "", "", "260406", "", "", "N")))
 
         Assert.assertEquals(expectedGpsNavInfo, rmc)
@@ -127,7 +127,7 @@ class GpsTest {
     fun testGsvSentenceWithoutLock() {
         val expectedGsv = GpsSatellitesInView(1, 1, 0, null)
 
-        val gps = Gps({ '?' }, { })
+        val gps = Gps({ '?' }, { }, { })
         val gsv = gps.gsv(Sentence("GP", "GSV", arrayOf("1", "1", "00")))
 
         Assert.assertEquals(expectedGsv, gsv)
@@ -137,7 +137,7 @@ class GpsTest {
     fun testGsaSentenceWithoutLock() {
         val expectedGsa = GpsActiveSatellites('A', '1', GpsChannelArray(intArrayOf()), GpsDilutionOfPrecision())
 
-        val gps = Gps({ '?' }, { })
+        val gps = Gps({ '?' }, { }, { })
         val gsa = gps.gsa(Sentence("GP", "GSA", arrayOf("A", "1", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "")))
 
         Assert.assertEquals(expectedGsa, gsa)
@@ -149,7 +149,7 @@ class GpsTest {
     fun testGgaSentenceWithoutLock() {
         val expected = GpsFix(OffsetTime.of(6, 49, 51, 0, ZoneOffset.UTC), null, '0', 0, null, null, Quantity(0, Metre))
 
-        val gps = Gps({ '?' }, { })
+        val gps = Gps({ '?' }, { }, { })
         val gsa = gps.gga(Sentence("GP", "GGA", arrayOf("064951.000", "", "", "", "", "0", "00", "", "", "M", "0.0", "M", "", "0000")))
 
         Assert.assertEquals(expected, gsa)
@@ -163,9 +163,25 @@ class GpsTest {
         val channel4 = GpsSatelliteMessage(16, Quantity(34, Degree), Quantity( 98, Degree), Quantity(23, Decibel))
         val expectedGsv = GpsSatellitesInView(3, 1, 12, channel1, channel2, channel3, channel4)
 
-        val gps = Gps({ '?' }, { })
+        val gps = Gps({ '?' }, { }, { })
         val gsv = gps.gsv(Sentence("GP", "GSV", arrayOf("3", "1", "12", "08", "78", "253", "", "27", "60", "055", "21", "07", "56", "280", "", "16", "34", "098", "23")))
 
         Assert.assertEquals(expectedGsv, gsv)
+    }
+
+    @Test
+    fun testSetNmeaBaudRate() {
+        var bytes = byteArrayOf()
+        val gps = Gps(recv = { '?' }, send =  { bytes = it }, callback = { })
+        gps.setNmeaBaudRate(PMTK.BaudRate.BAUD_RATE_57600)
+        Assert.assertEquals("\$PMTK251,57600*2C", bytes.toString(Charsets.US_ASCII))
+    }
+
+    @Test
+    fun testSetNmeaUpdateRate() {
+        var bytes = byteArrayOf()
+        val gps = Gps(recv = { '?' }, send =  { bytes = it }, callback = { })
+        gps.setNmeaUpdateRate(PMTK.UpdateRate(100))
+        Assert.assertEquals("\$PMTK220,100*2F", bytes.toString(Charsets.US_ASCII))
     }
 }
