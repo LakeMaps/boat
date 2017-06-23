@@ -2,7 +2,7 @@ package gps
 
 class PMTK {
     sealed class BaudRate(val baudRate: Int) {
-        object BAUD_RATE_57600 : BaudRate(7600)
+        object BAUD_RATE_57600 : BaudRate(57600)
     }
 
     class UpdateRate(val milliseconds: Int) {
