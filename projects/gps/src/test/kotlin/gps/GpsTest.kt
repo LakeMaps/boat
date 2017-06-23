@@ -168,4 +168,20 @@ class GpsTest {
 
         Assert.assertEquals(expectedGsv, gsv)
     }
+
+    @Test
+    fun testSetNmeaBaudRate() {
+        var bytes = byteArrayOf()
+        val gps = Gps(recv = { '?' }, send =  { bytes = it }, callback = { })
+        gps.setNmeaBaudRate(PMTK.BaudRate.BAUD_RATE_57600)
+        Assert.assertEquals("\$PMTK251,57600*2C", bytes.toString(Charsets.US_ASCII))
+    }
+
+    @Test
+    fun testSetNmeaUpdateRate() {
+        var bytes = byteArrayOf()
+        val gps = Gps(recv = { '?' }, send =  { bytes = it }, callback = { })
+        gps.setNmeaUpdateRate(PMTK.UpdateRate(100))
+        Assert.assertEquals("\$PMTK220,100*2F", bytes.toString(Charsets.US_ASCII))
+    }
 }
