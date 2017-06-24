@@ -1,4 +1,3 @@
-import org.gradle.api.tasks.testing.Test
 import org.gradle.api.tasks.testing.logging.TestLogging
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -7,7 +6,7 @@ repositories {
 }
 
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "1.1.2"
+    id("org.jetbrains.kotlin.jvm") version "1.1.3"
 }
 
 dependencies {

@@ -5,7 +5,7 @@ repositories {
 }
 
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "1.1.2"
+    id("org.jetbrains.kotlin.jvm") version "1.1.3"
 }
 
 dependencies {
