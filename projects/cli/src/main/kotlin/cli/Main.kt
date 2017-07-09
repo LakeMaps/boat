@@ -61,14 +61,8 @@ fun main(args: Array<String>) {
 
     Observable.interval(500, TimeUnit.MILLISECONDS)
         .observeOn(Schedulers.io())
-        .subscribe {
-            try {
-                gpsReceiver.poll()
-            } catch (e: Exception) {
-                Log.w { "$e" }
-                /* TODO: issue #67 */
-            }
-        }
+        .flatMap({ Observable.fromCallable(gpsReceiver::poll) })
+        .subscribe()
 
     broadcast.valuesOfType<GpsValue>()
         .observeOn(Schedulers.io())
