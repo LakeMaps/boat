@@ -3,6 +3,7 @@ include "core"
 include "gps"
 include "log"
 include "microcontrollers"
+include("rocksdb")
 include "units"
 
 rootProject.name = "boat"
