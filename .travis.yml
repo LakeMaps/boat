@@ -15,6 +15,9 @@ jdk:
     - oraclejdk8
     - oraclejdk9
     - openjdk8
+matrix:
+    allow_failures:
+        - jdk: oraclejdk9
 before_install:
     - (
            cd "${HOME}"
