@@ -44,7 +44,7 @@ fun main(args: Array<String>) {
         DatagramSocket(port), InetAddress.getByName(args[0]), port, ValueSerializer(), BasicOrder())
     val pSerialPort = SerialPort(args[1], baudRate = 57600)
     var gSerialPort = SerialPort(args[2], baudRate =  9600)
-    val propulsionMicrocontroller = PropulsionMicrocontroller(ReentrantLock(), { gSerialPort.recvByte() }, pSerialPort::send)
+    val propulsionMicrocontroller = PropulsionMicrocontroller(ReentrantLock(), { pSerialPort.recvByte() }, pSerialPort::send)
     val gpsReceiver = Gps({ gSerialPort.recvChar() }, gSerialPort::send, { msg -> broadcast.send(msg).subscribe() })
 
     val boat = Boat(broadcast, PropulsionSystem(propulsionMicrocontroller))
