@@ -22,7 +22,7 @@ dependencies {
 configure<ApplicationPluginConvention> {
     applicationName = rootProject.name
     version = rootProject.version
-    mainClassName = "cli.Main"
+    mainClassName = "bin.Main"
 }
 
 tasks.withType<KotlinCompile> {
