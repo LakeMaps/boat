@@ -38,12 +38,12 @@ class Gps(recv: () -> Char, private val send: (ByteArray) -> Unit, private val c
 
     fun setNmeaBaudRate(baudRate: PMTK.BaudRate) {
         val sentence = Sentence("PMTK", "251", arrayOf(baudRate.baudRate.toString()))
-        send(sentence.toString().toByteArray(Charsets.US_ASCII))
+        send((sentence.toString() + "\r\n").toByteArray(Charsets.US_ASCII))
     }
 
     fun setNmeaUpdateRate(updateRate: PMTK.UpdateRate) {
         val sentence = Sentence("PMTK", "220", arrayOf(updateRate.milliseconds.toString()))
-        send(sentence.toString().toByteArray(Charsets.US_ASCII))
+        send((sentence.toString() + "\r\n").toByteArray(Charsets.US_ASCII))
     }
 
     fun poll() {
