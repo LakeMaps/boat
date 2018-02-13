@@ -1,4 +1,4 @@
-include "cli"
+include "bin"
 include "core"
 include "gps"
 include "log"

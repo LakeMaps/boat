@@ -1,4 +1,4 @@
-package cli
+package bin
 
 internal data class SerialPort(val name: String, val baudRate: Int) {
     private val serialPort = com.fazecast.jSerialComm.SerialPort.getCommPort(name)!!

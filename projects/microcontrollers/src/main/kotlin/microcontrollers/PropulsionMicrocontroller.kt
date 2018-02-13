@@ -2,8 +2,11 @@ package microcontrollers
 
 import java.nio.ByteBuffer
 import java.util.concurrent.locks.Lock
+import java.util.concurrent.locks.ReentrantLock
 
 class PropulsionMicrocontroller(override val lock: Lock, override val recv: () -> Byte, override val send: (ByteArray) -> Unit) : Microcontroller {
+    constructor(recv: () -> Byte, send: (ByteArray) -> Unit) : this(ReentrantLock(), recv, send)
+
     companion object {
         val OUTPUT_RANGE = -127.0..127.0
     }
