@@ -23,7 +23,7 @@ internal data class SerialPort(val name: String, val baudRate: Int) {
     }
 
     fun disconnect() {
-        serialPort.outputStream.flush();
+        serialPort.outputStream.flush()
         serialPort.closePort()
     }
 }
