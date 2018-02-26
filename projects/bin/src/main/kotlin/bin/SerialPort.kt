@@ -19,7 +19,13 @@ internal data class SerialPort(val name: String, val baudRate: Int) {
     fun recvChar(): Char = recvByte().toChar()
 
     fun send(bytes: ByteArray) {
-        serialPort.writeBytes(bytes, bytes.size.toLong())
+        val sentCount = serialPort.writeBytes(bytes, bytes.size.toLong())
+        if (sentCount == -1) {
+            throw RuntimeException("Could not write to the serial device")
+        }
+        if (sentCount != bytes.size) {
+            throw RuntimeException("Error writing ${bytes.size} bytes to the device, $sentCount sent")
+        }
     }
 
     fun disconnect() {
