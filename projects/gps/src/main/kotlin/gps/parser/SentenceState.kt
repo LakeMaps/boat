@@ -10,20 +10,20 @@ internal sealed class SentenceState {
     internal class Prefix : SentenceState() {
         fun next(recv: () -> Char): SentenceState {
             val char = recv()
-            if (char == Sentence.MESSAGE_START) {
-                return SentenceState.Talker()
+            return if (char == Sentence.MESSAGE_START) {
+                SentenceState.Talker()
             } else {
-                return SentenceState.Prefix()
+                SentenceState.Prefix()
             }
         }
     }
 
     internal class Talker: SentenceState() {
-        private val PM_TALKER_ID = charArrayOf('P', 'M')
+        private val talkerIdPM = charArrayOf('P', 'M')
 
         fun next(recv: () -> Char): SentenceState {
             var talker = charArrayOf(recv(), recv())
-            if (Arrays.equals(talker, PM_TALKER_ID)) {
+            if (Arrays.equals(talker, talkerIdPM)) {
                 // The PM Talker ID is four bytes
                 talker += charArrayOf(recv(), recv())
             }
@@ -50,17 +50,19 @@ internal sealed class SentenceState {
     }
 
     internal class Fields(val talker: CharArray, val type: CharArray): SentenceState() {
+        private val bytesReadInPreviousStates = 7
+
         fun next(recv: () -> Char): SentenceState {
             val fields = mutableListOf<CharArray>()
             var field = mutableListOf<Char>()
-            var count = 0
+            var bytesRead = 0
             while (true) {
                 val char = recv()
-                count++
+                bytesRead++
 
                 if (char == Sentence.FIELD_DELIMITER) {
                     fields.add(field.toCharArray())
-                    field = mutableListOf<Char>()
+                    field = mutableListOf()
                     continue
                 }
                 if (char == Sentence.CHECKSUM_DELIMITER) {
@@ -71,8 +73,7 @@ internal sealed class SentenceState {
                     fields.add(field.toCharArray())
                     return SentenceState.Complete(Sentence(talker, type, fields.toTypedArray()))
                 }
-                // We've seen 7 chars from previous states
-                if ((count + 7) > MAXIMUM_SENTENCE_LENGTH) {
+                if ((bytesRead + bytesReadInPreviousStates) > MAXIMUM_SENTENCE_LENGTH) {
                     return SentenceState.Prefix()
                 }
 
@@ -82,8 +83,10 @@ internal sealed class SentenceState {
     }
 
     internal class Checksum(val talker: CharArray, val type: CharArray, val fields: Array<CharArray>): SentenceState() {
+        private val hexadecimalRadix = 16
+
         fun next(recv: () -> Char): SentenceState {
-            val checksum = Integer.parseInt(String(charArrayOf(recv(), recv())), 16)
+            val checksum = Integer.parseInt(String(charArrayOf(recv(), recv())), hexadecimalRadix)
             val sentence = Sentence(talker, type, fields)
             return when (checksum) {
                 sentence.checksum -> SentenceState.Complete(sentence)
