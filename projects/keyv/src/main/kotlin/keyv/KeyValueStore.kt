@@ -24,6 +24,16 @@ interface KeyValueStore {
     fun put(key: ByteArray, value: String) = put(key, value.toByteArray(Charsets.UTF_8))
 
     /**
+     * Set the value for the given key.
+     *
+     * @param key the specified key to be inserted
+     * @param value the value associated with the specified key
+     *
+     * @throws Exception if the put cannot be completed.
+     */
+    fun put(long: Long, value: ByteArray) = put(Bytes.from(long), value)
+
+    /**
      * Returns a new {@code ByteArray} storing the value associated for the given key.
      *
      * If the given key does not have a value associated with it {@code null} will be
