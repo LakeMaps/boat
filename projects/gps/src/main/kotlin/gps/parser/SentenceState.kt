@@ -69,7 +69,7 @@ internal sealed class SentenceState {
                 }
                 if (char == Sentence.MESSAGE_END1 || char == Sentence.MESSAGE_END2) {
                     fields.add(field.toCharArray())
-                    return SentenceState.Complete(talker, type, fields.toTypedArray())
+                    return SentenceState.Complete(Sentence(talker, type, fields.toTypedArray()))
                 }
                 // We've seen 7 chars from previous states
                 if ((count + 7) > MAXIMUM_SENTENCE_LENGTH) {
@@ -83,12 +83,14 @@ internal sealed class SentenceState {
 
     internal class Checksum(val talker: CharArray, val type: CharArray, val fields: Array<CharArray>): SentenceState() {
         fun next(recv: () -> Char): SentenceState {
-            // TODO: validate the checksum
-            @Suppress("UNUSED_VARIABLE")
-            val checksum = charArrayOf(recv(), recv())
-            return SentenceState.Complete(talker, type, fields)
+            val checksum = Integer.parseInt(String(charArrayOf(recv(), recv())), 16)
+            val sentence = Sentence(talker, type, fields)
+            return when (checksum) {
+                sentence.checksum -> SentenceState.Complete(sentence)
+                else -> SentenceState.Prefix()
+            }
         }
     }
 
-    internal class Complete(val talker: CharArray, val type: CharArray, val fields: Array<CharArray>): SentenceState()
+    internal class Complete(val sentence: Sentence): SentenceState()
 }

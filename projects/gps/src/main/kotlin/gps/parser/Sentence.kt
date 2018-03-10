@@ -30,16 +30,16 @@ class Sentence(val talker: CharArray, val type: CharArray, val fields: Array<Cha
         fields.fold(charArrayOf(), { acc, chars -> acc + FIELD_DELIMITER + chars })
     }
 
-    val checksum: Char by lazy {
+    val checksum: Int by lazy {
         checksum(talker + type + data)
     }
 
-    private fun checksum(chars: CharArray): Char {
-        return chars.fold(0, { acc, c -> acc.xor(c.toInt()) }).toChar()
+    private fun checksum(chars: CharArray): Int {
+        return chars.fold(0, { acc, c -> acc.xor(c.toInt()) })
     }
 
     override fun toString(): String {
-        val cs = String.format(Locale.ENGLISH, "%s%02X", CHECKSUM_DELIMITER, checksum.toByte())
+        val cs = String.format(Locale.ENGLISH, "%s%02X", CHECKSUM_DELIMITER, checksum)
         return (talker + type + data).joinToString(prefix = MESSAGE_START.toString(), separator = "", postfix = cs)
     }
 }

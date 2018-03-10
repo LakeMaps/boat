@@ -10,9 +10,7 @@ class SentenceParser(private val recv: () -> Char) {
                 is SentenceState.MessageType -> state.next(recv)
                 is SentenceState.Fields      -> state.next(recv)
                 is SentenceState.Checksum    -> state.next(recv)
-                is SentenceState.Complete    -> {
-                    return Sentence(state.talker, state.type, state.fields)
-                }
+                is SentenceState.Complete    -> return state.sentence
             }
         }
     }
