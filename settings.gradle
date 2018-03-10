@@ -1,9 +1,9 @@
 include "bin"
 include "core"
 include "gps"
+include "keyv"
 include "log"
 include "microcontrollers"
-include("rocksdb")
 include "units"
 
 rootProject.name = "boat"
