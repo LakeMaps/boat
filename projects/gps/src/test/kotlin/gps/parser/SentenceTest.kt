@@ -7,7 +7,7 @@ class SentenceTest {
     @Test
     fun sentenceChecksumIsCorrect() {
         val s = Sentence("GP", "VTG", arrayOf("165.48", "T", "", "M", "0.03", "N", "0.06", "K", "A"))
-        Assert.assertTrue(s.checksum == 54.toChar())
+        Assert.assertTrue(s.checksum == 54)
     }
 
     @Test
