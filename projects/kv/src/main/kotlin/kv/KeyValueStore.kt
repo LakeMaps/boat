@@ -1,4 +1,4 @@
-package keyv
+package kv
 
 interface KeyValueStore {
     /**

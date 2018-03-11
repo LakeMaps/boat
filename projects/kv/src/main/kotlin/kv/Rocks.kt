@@ -1,4 +1,4 @@
-package keyv
+package kv
 
 import org.rocksdb.InfoLogLevel
 import org.rocksdb.Options

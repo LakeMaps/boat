@@ -1,4 +1,4 @@
-package keyv
+package kv
 
 object Bytes {
     fun from(number: Long): ByteArray {
