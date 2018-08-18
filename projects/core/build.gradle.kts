@@ -9,7 +9,7 @@ repositories {
 }
 
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "1.2.31"
+    id("org.jetbrains.kotlin.jvm") version "1.2.60"
     id("com.google.protobuf") version "0.8.1"
 }
 
