@@ -1,6 +1,7 @@
 include "bin"
 include "core"
 include "gps"
+include "imu"
 include "kv"
 include "microcontrollers"
 include "units"
